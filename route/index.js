@@ -1,0 +1,1 @@
+const authRouter = require('./auth')
