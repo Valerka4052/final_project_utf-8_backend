@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 require("dotenv").config();
-
+// const operationsRouter = require("./route/operations");
 const authRouter = require("./route/auth");
+const operationsRouter = require("./route/operations");
 
 app.use(cors());
 app.use(express.json());
@@ -11,6 +12,7 @@ app.use(express.static("public"));
 
 // тут повинні бути роути
 app.use("/users", authRouter);
+app.use("/", operationsRouter);
 // тут повинні бути роути
 
 app.use((req, res) => {
