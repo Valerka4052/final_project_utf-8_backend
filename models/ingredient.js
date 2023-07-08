@@ -1,19 +1,19 @@
 const { Schema, model } = require('mongoose');
-const { hahdleMongooseError } = require('../helpers');
-const Joi = require('joi');
+const { handleMongooseError } = require('../helpers');
+// const Joi = require('joi');
 
-const addIngredientShema = Joi.object({
-    name: Joi.string().required(),
-    desc: Joi.string().required(),
-    img: Joi.string().required(),
-}).messages({
-  'any.required': 'missing required {#label} field',
-  'object.missing': 'Fields {#context.missing} are missing'
-});
+// const addIngredientShema = Joi.object({
+//     name: Joi.string().required(),
+//     desc: Joi.string().required(),
+//     img: Joi.string().required(),
+// }).messages({
+//   'any.required': 'missing required {#label} field',
+//   'object.missing': 'Fields {#context.missing} are missing'
+// });
 
 // const updateFavoriteShema = Joi.object({ favorite: Joi.bool().required().messages({ 'any.required': 'missing field {#label}' }) });
 
-const ingredientSchema = new Schema({
+const IngredientSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -30,7 +30,7 @@ const ingredientSchema = new Schema({
     versionKey: false, timestamps: true
 });
 
-ingredientSchema.post("save", hahdleMongooseError);
-const schemas = { addContactShema, updateFavoriteShema };
-const Ingredient = model('Ingredient', ingredientSchema);
-module.exports = { Ingredient, schemas };
+// IngredientSchema.post("save", handleMongooseError);
+// const schemas = { addIngredientShema };
+const Ingredient = model('Ingredient', IngredientSchema);
+module.exports = { Ingredient };
