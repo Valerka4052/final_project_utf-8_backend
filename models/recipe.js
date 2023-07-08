@@ -83,6 +83,7 @@ const recipeSchema = new Schema({
             type: Schema.Types.ObjectId,
             ref: 'user',
         },
+        default:[],
     }]
 }, {
     versionKey: false, timestamps: true,
