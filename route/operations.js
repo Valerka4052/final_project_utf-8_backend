@@ -1,5 +1,6 @@
 const express = require("express");
 const operationsRouter = express.Router();
+const isValid = require('../middlewares/isValidId')
 const {
     getListsByCategories,
     getAllCategories,
@@ -23,7 +24,7 @@ const {
 operationsRouter.get('/recipes/main-page', getListsByCategories);
 operationsRouter.get('/recipes/category-list', getAllCategories);
 operationsRouter.get('/recipes/{category}', getListsByCategoriesPage);
-operationsRouter.get('/recipes/:id', getRecipeById);
+operationsRouter.get('/recipes/:id', isValid, getRecipeById);
 operationsRouter.post('/search', searchRecipes);
 operationsRouter.get('/ingredients/list', getAllIngredients);
 operationsRouter.post('/ingredients', getRecipesByIngredient);

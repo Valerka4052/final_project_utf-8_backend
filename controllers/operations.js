@@ -53,7 +53,7 @@ const searchRecipes = async (req, res) => {
 
 const getAllIngredients = async (req, res) => {
     const ingredients = await Ingredient.find();
-    if (!ingredients) return HttpError(404, 'recipes not found');
+    if (!ingredients) return HttpError(404, 'not found');
     res.status(200).json(ingredients);
 };
 
@@ -61,7 +61,7 @@ const getRecipesByIngredient = async (req, res) => {
     const { id } = req.body;
     console.log(id);
     const recipes = await Recipe.find({ ingredients: { $elemMatch: { id } } });
-    if (!recipes) return HttpError(404, 'recipes not found');
+    if (!recipes) return HttpError(404, 'not found');
     res.status(200).json(recipes);
 };
 
