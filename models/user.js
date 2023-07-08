@@ -21,6 +21,10 @@ const userSchema = new Schema(
       type: String,
       default: null,
     },
+    shoppingList: {
+      type: [{ id: { type: Schema.Types.ObjectId, ref: 'user', }, }],
+      default:[],
+    },
   },
   { versionKey: false, timestamps: false }
 );
