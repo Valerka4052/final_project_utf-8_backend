@@ -59,10 +59,25 @@ const login = async (req, res) => {
   });
 };
 
+const getCurrent = async (req, res) => {
+  const { email, name } = req.user;
+  console.log(req.user);
+  res.status(200).json({
+    email: email,
+    name: name,
+  });
+};
+
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  await User.findByIdAndUpdate(_id, { token: "" });
+  res.status(204).json();
+};
+
 module.exports = {
   register: funcWrapper(register),
   login: funcWrapper(login),
-  // getCurrent: ctrlWrapper(getCurrent),
-  // logout: ctrlWrapper(logout),
+  getCurrent: funcWrapper(getCurrent),
+  logout: funcWrapper(logout),
   // updateSubscriptionUser: ctrlWrapper(updateSubscriptionUser),
 };
