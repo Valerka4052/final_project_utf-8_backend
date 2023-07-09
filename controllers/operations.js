@@ -6,11 +6,14 @@ const { ObjectId } = require("mongoose").Types;
 const { funcWrapper, HttpError, sendEmail } = require("../helpers");
 
 const subscribe = async (req, res) => {
-  const { email } = req.body;
   const verifyEmail = {
     to: email,
     subject: "Subscribe",
-    html: (`<h1 target="_blank">Subscribe</h1>`),
+    html: ` <h1
+        target="_blank"
+      >
+        You subscribed to Soyummy !
+      </h1>`,
   };
   await sendEmail(verifyEmail);
 };
@@ -157,7 +160,7 @@ const getPouplarRecipes = async (req, res) => {
 
 const addProductToSoppingList = async (req, res) => {
   const { _id: userId } = req.user;
-  const { id,measure } = req.body;
+  const { id, measure } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
     { $push: { shoppingList: { _id: id, measure } } },
@@ -172,7 +175,7 @@ const removeProductFromSoppingList = async (req, res) => {
   const { id } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $pull: { shoppingList:{_id: id} } },
+    { $pull: { shoppingList: { _id: id } } },
     { new: true }
   );
   if (!updatedUser) throw HttpError(404, "not found");
