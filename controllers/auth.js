@@ -1,9 +1,13 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const path = require("path");
+const fs = require("fs/promises");
 const { User } = require("../models/user");
 const { funcWrapper, HttpError } = require("../helpers");
 
 SECRET_KEY = '{nYf}?:U,PI/^4>Pb"Qw`fa`oS2J1D';
+
+const avatarsDir = path.join(__dirname, "../public/avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -31,6 +35,8 @@ const register = async (req, res) => {
     user: {
       email: newUser.email,
       name: newUser.name,
+      avatarURL: newUser.avatarURL,
+      shoppingList: newUser.shoppingList,
     },
   });
 };
@@ -55,6 +61,8 @@ const login = async (req, res) => {
     user: {
       email: user.email,
       name: user.name,
+      avatarURL: user.avatarURL,
+      shoppingList: user.shoppingList,
     },
   });
 };
@@ -74,10 +82,37 @@ const logout = async (req, res) => {
   res.status(204).json();
 };
 
+const updateUser = async (req, res) => {
+  const { _id } = req.user;
+  const name = req.body.name || req.user.name;
+  const bodyLength = Object.keys(req.body).length;
+
+  if (!req.file) {
+    await User.findByIdAndUpdate(_id, { name });
+    res.json({ name });
+  } else if (bodyLength === 0) {
+    const { path: tempUpload, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarsDir, filename);
+    await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join("avatars", filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+    res.json({ avatarURL });
+  } else {
+    const { path: tempUpload, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarsDir, filename);
+    await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join("avatars", filename);
+    await User.findByIdAndUpdate(_id, { avatarURL, name });
+    res.json({ avatarURL, name });
+  }
+};
+
 module.exports = {
   register: funcWrapper(register),
   login: funcWrapper(login),
   getCurrent: funcWrapper(getCurrent),
   logout: funcWrapper(logout),
-  // updateSubscriptionUser: ctrlWrapper(updateSubscriptionUser),
+  updateUser: funcWrapper(updateUser),
 };

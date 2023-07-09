@@ -22,8 +22,12 @@ const userSchema = new Schema(
       default: null,
     },
     shoppingList: {
-      type: [{ id: { type: Schema.Types.ObjectId, ref: 'user', }, }],
-      default:[],
+      type: [{ id: { type: Schema.Types.ObjectId, ref: "user" } }],
+      default: [],
+    },
+    avatarURL: {
+      type: String,
+      default: null,
     },
   },
   { versionKey: false, timestamps: false }
