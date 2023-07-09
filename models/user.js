@@ -22,8 +22,16 @@ const userSchema = new Schema(
       default: null,
     },
     shoppingList: {
-      type: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }],
+      type: [{ type: Schema.Types.ObjectId, ref: "Ingredient" }],
       default: [],
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationCode: {
+      type: String,
+      required: [true, "Verify token is required"],
     },
   },
   { versionKey: false, timestamps: true }
