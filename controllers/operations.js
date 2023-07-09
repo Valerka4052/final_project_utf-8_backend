@@ -157,10 +157,10 @@ const getPouplarRecipes = async (req, res) => {
 
 const addProductToSoppingList = async (req, res) => {
   const { _id: userId } = req.user;
-  const { id } = req.body;
+  const { id,measure } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $push: { shoppingList: { _id: id } } },
+    { $push: { shoppingList: { _id: id, measure } } },
     { new: true }
   );
   if (!updatedUser) throw HttpError(404, "not found");
@@ -172,7 +172,7 @@ const removeProductFromSoppingList = async (req, res) => {
   const { id } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $pull: { shoppingList: id } },
+    { $pull: { shoppingList:{_id: id} } },
     { new: true }
   );
   if (!updatedUser) throw HttpError(404, "not found");

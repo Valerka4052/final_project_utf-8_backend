@@ -22,7 +22,12 @@ const userSchema = new Schema(
       default: null,
     },
     shoppingList: {
-      type: [{ type: Schema.Types.ObjectId, ref: "Ingredient" }],
+
+      type: [{
+        id: { type: Schema.Types.ObjectId, ref: 'Ingredient' },
+        measure:String
+      }],
+
       default: [],
     },
     verify: {
