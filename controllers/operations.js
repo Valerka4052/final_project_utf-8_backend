@@ -10,7 +10,7 @@ const subscribe = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Subscribe",
-    html: <h1 target="_blank">Subscribe</h1>,
+    html: (`<h1 target="_blank">Subscribe</h1>`),
   };
   await sendEmail(verifyEmail);
 };

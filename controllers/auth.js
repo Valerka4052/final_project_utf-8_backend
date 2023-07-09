@@ -37,12 +37,12 @@ const register = async (req, res) => {
     to: email,
     subject: "Verified email",
     html: (
-      <a
+     ` <a
         target="_blank"
         href="http://localHost:3001/users/verify/${verificationCode}"
       >
         Click verify email
-      </a>
+      </a>`
     ),
   };
   await sendEmail(verifyEmail);
