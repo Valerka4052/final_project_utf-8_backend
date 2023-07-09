@@ -25,6 +25,15 @@ const validateBodyPost = (schema) => {
   return func;
 };
 
+const validated = (shema) => {
+    const func = (req, res, next) => {
+        const { error } = shema.validate(req.body);
+        if (error) next(HttpError(400, error.message));
+        next();
+    };
+    return func;
+};
+
 const validateUsersPatch = (schema) => {
   const func = (req, res, next) => {
     const { error } = schema.validate(req.body);
@@ -39,6 +48,6 @@ const validateUsersPatch = (schema) => {
 
 module.exports = {
   validateBodyPost,
-
+validated,
   validateUsersPatch,
 };

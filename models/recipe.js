@@ -2,7 +2,7 @@ const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../helpers');
 const Joi = require('joi');
 
-const addIngredientShema = Joi.object({
+const addRecipetShema = Joi.object({
     title: Joi.string().required(),
     category: Joi.string().required(),
     area: Joi.string().required(),
@@ -19,20 +19,9 @@ const addIngredientShema = Joi.object({
     'object.missing': 'Fields {#context.missing} are missing'
 });
 
-// const updateFavoriteShema = Joi.object({ favorite: Joi.bool().required().messages({ 'any.required': 'missing field {#label}' }) });
-
 const IngrSchema = new Schema({
-    id:{type:String}
-    // {
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'ingredient',
-    //     required: true
-    // }
-    ,
-    measure: {
-        type: String,
-        required: true,
-    }
+    id: { type: String },
+    measure: { type: String }
 });
 
 const recipeSchema = new Schema({
@@ -70,7 +59,7 @@ const recipeSchema = new Schema({
     },
     youtube: {
         type: String,
-        required: true,
+        // required: true,
     },
     tags:  [String],
     ingredients: [IngrSchema],
@@ -87,6 +76,5 @@ const recipeSchema = new Schema({
 });
 
 recipeSchema.post("save", handleMongooseError);
-// const schemas = { addContactShema, updateFavoriteShema };
 const Recipe = model('Recipe', recipeSchema);
-module.exports = { Recipe };
+module.exports = { Recipe, addRecipetShema };

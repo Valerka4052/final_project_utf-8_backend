@@ -22,15 +22,11 @@ const userSchema = new Schema(
       default: null,
     },
     shoppingList: {
-      type: [{ id: { type: Schema.Types.ObjectId, ref: "user" } }],
+      type: [{ type: Schema.Types.ObjectId, ref: 'Ingredient' }],
       default: [],
     },
-    avatarURL: {
-      type: String,
-      default: null,
-    },
   },
-  { versionKey: false, timestamps: false }
+  { versionKey: false, timestamps: true }
 );
 
 userSchema.post("save", handleMongooseError);
