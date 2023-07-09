@@ -1,13 +1,22 @@
 axios BaseURL = 'https://final-project-utf-8-backend.onrender.com'
 
-axios Headers.Authorization - потрібно вставити токен
+axios Headers.Authorization - потрібно вставити токен після реєстрації для роботи іншими роутами
+
+
+axios.post("/register", {name,email,password} ); --реєстрація
+
+authRouter.post(  "/login", {email,password} );  --вхід
+
+authRouter.get("/current"); -перевіряє чи валідний токен в хедерсах і повертає юзера
+
+authRouter.post("/logout"); - вихід 
 
 
 
 axois.post('/subscribe'); -- отримання підписки (поки що в процесі)
 axois.get('/recipes/main-page'); --отримання рецептів по категоріям для головної сторінки
 axois.get('/recipes/category-list'); --Cписок категорій Відсортований по алфавіту
-axois.get(`/recipes/${category}`); -- отримання рецептів по категорії по 8 рецептів (category це id категорії) 
+axois.get(`/recipes/category/${category}`); -- отримання рецептів по категорії по 8 рецептів (category це id категорії) 
 axois.get(`/recipes/${id}`); --отримання одного рецепта по id
 axois.post('/search',{search:'слово по якму ведеться пошук'}); --пошук рецептів по ключовому слову в заголовку
 axois.get('/ingredients/list'); --отримання списку інгрієнтів
