@@ -39,7 +39,7 @@ const register = async (req, res) => {
     html: (
      ` <a
         target="_blank"
-        href="http://localHost:3001/users/verify/${verificationCode}"
+        href="https://final-project-utf-8-backend.onrender.com/users/verify/${verificationCode}"
       >
         Click verify email
       </a>`
