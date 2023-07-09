@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs/promises");
-const nanoid = require("nanoid");
+const { nanoid } = require("nanoid");
 const { User } = require("../models/user");
 const { funcWrapper, HttpError, sendEmail } = require("../helpers");
 
@@ -36,14 +36,12 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verified email",
-    html: (
-     ` <a
+    html: ` <a
         target="_blank"
         href="https://final-project-utf-8-backend.onrender.com/users/verify/${verificationCode}"
       >
         Click verify email
-      </a>`
-    ),
+      </a>`,
   };
   await sendEmail(verifyEmail);
 
