@@ -22,11 +22,12 @@ const userSchema = new Schema(
       default: null,
     },
     shoppingList: {
-
-      type: [{
-        id: { type: Schema.Types.ObjectId, ref: 'Ingredient' },
-        measure:String
-      }],
+      type: [
+        {
+          id: { type: Schema.Types.ObjectId, ref: "Ingredient" },
+          measure: String,
+        },
+      ],
 
       default: [],
     },
@@ -55,9 +56,14 @@ const loginSchema = Joi.object({
   password: Joi.string().min(6).required(),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
+  emailSchema,
 };
 
 const User = model("user", userSchema);
