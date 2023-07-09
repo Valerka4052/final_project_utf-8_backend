@@ -39,7 +39,7 @@ const register = async (req, res) => {
     subject: "Verified email",
     html: ` <a
         target="_blank"
-        href="https://final-project-utf-8-backend.onrender.com/users/verify/${verificationCode}"
+        href="http://localhost:3001/users/verify/${verificationCode}"
       >
         Click verify email
       </a>`,
@@ -57,11 +57,46 @@ const register = async (req, res) => {
   });
 };
 
+const verifyEmail = async (req, res) => {
+  const { verificationCode } = req.params;
+  const user = await User.findOne({ verificationCode });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationCode: "",
+  });
+  res.status(200).json({ message: "Verification successful" });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw HttpError(404, "User not found");
+  }
+  if (user.verify) {
+    throw HttpError(400, "Verification has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: "Verify Cemailode",
+    html: `<a target='_blank' href="http://localhost:3001/users/verify/${user.verificationCode}">Click verify email</a>`,
+  };
+  await sendMail(verifyEmail);
+  res.status(200).json({ message: "Verification email sent" });
+};
+
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
     throw HttpError(401, "Email or password is wrong");
+  }
+  if (!user.verify) {
+    throw HttpError(404, "User not found");
   }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
@@ -140,4 +175,6 @@ module.exports = {
   getCurrent: funcWrapper(getCurrent),
   logout: funcWrapper(logout),
   updateUser: funcWrapper(updateUser),
+  verifyEmail: funcWrapper(verifyEmail),
+  resendVerifyEmail: funcWrapper(resendVerifyEmail),
 };
