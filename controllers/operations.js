@@ -74,10 +74,11 @@ const getRecipeByUser = async (req, res) => {
 
 const addRecipe = async (req, res) => {
     const { _id } = req.user;
-    console.log(_id);
-    const recipe = await Recipe.create({ ...req.body, owner: _id })
-    if (!recipe) return HttpError(404, 'not found');
-    res.status(201).json(recipe);
+     const { path } = req.file;
+    console.log('req.body',req.body);
+    // const recipe = await Recipe.create({ ...req.body, owner: _id })
+    // if (!recipe) return HttpError(404, 'not found');
+    res.status(200).json(req.file);
 };
 
 const deleteRecipe = async (req, res) => {
@@ -137,7 +138,7 @@ const getPouplarRecipes = async (req, res) => {
 const addProductToSoppingList = async (req, res) => {
     const { _id: userId } = req.user;
     const { id } = req.body;
-    const updatedUser = await User.findByIdAndUpdate(userId, { $push: { shoppingList: { _id:id } } }, { new: true });
+    const updatedUser = await User.findByIdAndUpdate(userId, { $push: { shoppingList: { _id: id } } }, { new: true });
     if (!updatedUser) throw HttpError(404, 'not found');
     return res.status(200).json(updatedUser.shoppingList);
 };

@@ -91,21 +91,27 @@ const updateUser = async (req, res) => {
     await User.findByIdAndUpdate(_id, { name });
     res.json({ name });
   } else if (bodyLength === 0) {
-    const { path: tempUpload, originalname } = req.file;
-    const filename = `${_id}_${originalname}`;
-    const resultUpload = path.join(avatarsDir, filename);
-    await fs.rename(tempUpload, resultUpload);
-    const avatarURL = path.join("avatars", filename);
-    await User.findByIdAndUpdate(_id, { avatarURL });
-    res.json({ avatarURL });
+    // const { path: tempUpload, originalname } = req.file;
+    // const filename = `${_id}_${originalname}`;
+    // const resultUpload = path.join(avatarsDir, filename);
+    // await fs.rename(tempUpload, resultUpload);
+    // const avatarURL = path.join("avatars", filename);
+    //     await User.findByIdAndUpdate(_id, { avatarURL });
+    // res.json({ avatarURL });
+    const { path } = req.file;
+    const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL:path });
+    res.json({ avatarURL: updatedUser.avatarURL });
   } else {
-    const { path: tempUpload, originalname } = req.file;
-    const filename = `${_id}_${originalname}`;
-    const resultUpload = path.join(avatarsDir, filename);
-    await fs.rename(tempUpload, resultUpload);
-    const avatarURL = path.join("avatars", filename);
-    await User.findByIdAndUpdate(_id, { avatarURL, name });
-    res.json({ avatarURL, name });
+    // const { path: tempUpload, originalname } = req.file;
+    // const filename = `${_id}_${originalname}`;
+    // const resultUpload = path.join(avatarsDir, filename);
+    // await fs.rename(tempUpload, resultUpload);
+    // const avatarURL = path.join("avatars", filename);
+    // await User.findByIdAndUpdate(_id, { avatarURL, name });
+    // res.json({ avatarURL, name });
+    const { path } = req.file;
+    const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: path, name });
+    res.json({ avatarURL: updatedUser.avatarURL, name: updatedUser.name });
   }
 };
 
