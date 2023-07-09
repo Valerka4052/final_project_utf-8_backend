@@ -1,4 +1,4 @@
-const { validateBody, authenticate } = require("../middlewares");
+const { validateBody, authenticate, upload } = require("../middlewares");
 
 const { schemas } = require("../models/user");
 const ctrl = require("../controllers/auth");
@@ -20,5 +20,12 @@ authRouter.post(
 authRouter.get("/current", authenticate, ctrl.getCurrent);
 
 authRouter.post("/logout", authenticate, ctrl.logout);
+
+authRouter.patch(
+  "/update",
+  authenticate,
+  upload.single("avatar"),
+  ctrl.updateUser
+);
 
 module.exports = authRouter;
