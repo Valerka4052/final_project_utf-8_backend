@@ -28,7 +28,7 @@ const {
 operationsRouter.post('/subscribe', authenticate, subscribe);
 operationsRouter.get('/recipes/main-page', authenticate, getListsByCategories);
 operationsRouter.get('/recipes/category-list', authenticate, getAllCategories);
-operationsRouter.get('/recipes/:category', authenticate, getListsByCategoriesPage);
+operationsRouter.get('/recipes/category/:category', authenticate, getListsByCategoriesPage);
 operationsRouter.get('/recipes/:id', isValid, authenticate, getRecipeById);
 operationsRouter.post('/search', authenticate, searchRecipes);
 operationsRouter.get('/ingredients/list', authenticate, getAllIngredients);
