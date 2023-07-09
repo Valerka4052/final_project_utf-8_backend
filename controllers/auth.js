@@ -33,6 +33,7 @@ const register = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
   const updatedUser = await User.findByIdAndUpdate(_id, { token });
+
   const verifyEmail = {
     to: email,
     subject: "Verified email",
