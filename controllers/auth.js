@@ -2,8 +2,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const fs = require("fs/promises");
+const nanoid = require("nanoid");
 const { User } = require("../models/user");
-const { funcWrapper, HttpError } = require("../helpers");
+const { funcWrapper, HttpError, sendEmail } = require("../helpers");
 
 SECRET_KEY = '{nYf}?:U,PI/^4>Pb"Qw`fa`oS2J1D';
 
@@ -18,9 +19,12 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const verificationCode = nanoid();
+
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
+    verificationCode,
   });
   const { _id } = newUser;
   const payload = {
@@ -29,6 +33,19 @@ const register = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
 
   const updatedUser = await User.findByIdAndUpdate(_id, { token });
+  const verifyEmail = {
+    to: email,
+    subject: "Verified email",
+    html: (
+      <a
+        target="_blank"
+        href="http://localHost:3001/users/verify/${verificationCode}"
+      >
+        Click verify email
+      </a>
+    ),
+  };
+  await sendEmail(verifyEmail);
 
   res.status(201).json({
     token,
@@ -99,7 +116,7 @@ const updateUser = async (req, res) => {
     //     await User.findByIdAndUpdate(_id, { avatarURL });
     // res.json({ avatarURL });
     const { path } = req.file;
-    const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL:path });
+    const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: path });
     res.json({ avatarURL: updatedUser.avatarURL });
   } else {
     // const { path: tempUpload, originalname } = req.file;
@@ -110,7 +127,10 @@ const updateUser = async (req, res) => {
     // await User.findByIdAndUpdate(_id, { avatarURL, name });
     // res.json({ avatarURL, name });
     const { path } = req.file;
-    const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: path, name });
+    const updatedUser = await User.findByIdAndUpdate(_id, {
+      avatarURL: path,
+      name,
+    });
     res.json({ avatarURL: updatedUser.avatarURL, name: updatedUser.name });
   }
 };
