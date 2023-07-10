@@ -31,14 +31,15 @@ const userSchema = new Schema(
 
       default: [],
     },
-    verify: {
-      type: Boolean,
-      default: false,
-    },
-    verificationCode: {
-      type: String,
-      required: [true, "Verify token is required"],
-    },
+    avatarURL: { type: String },
+    // verify: {
+    //   type: Boolean,
+    //   default: false,
+    // },
+    // verificationCode: {
+    //   type: String,
+    //   required: [true, "Verify token is required"],
+    // },
   },
   { versionKey: false, timestamps: true }
 );
