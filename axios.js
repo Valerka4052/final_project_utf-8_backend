@@ -13,7 +13,7 @@ authRouter.post("/logout"); - вихід
 
 
 
-axois.post('/subscribe'); -- отримання підписки (поки що в процесі)
+axois.post('/subscribe',{email:'email'}); -- отримання підписки (поки що в процесі)
 axois.get('/recipes/main-page'); --отримання рецептів по категоріям для головної сторінки
 axois.get('/recipes/category-list'); --Cписок категорій Відсортований по алфавіту
 axois.get(`/recipes/category/${category}`); -- отримання рецептів по категорії по 8 рецептів (category це id категорії) 
