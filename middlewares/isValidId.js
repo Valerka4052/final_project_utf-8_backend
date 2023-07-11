@@ -6,7 +6,7 @@ const isValid = (req, res, next) => {
     next()
 };
 const isValidIdByReqBody = (req, res, next) => {
-    if (!isValidObjectId(req.body.id)) next(HttpError(400, `${req.params.id} is not valid id`));
+    if (!isValidObjectId(req.body.id)) next(HttpError(400, `${req.body.id} is not valid id`));
     next()
 };
 module.exports = { isValid, isValidIdByReqBody };

@@ -20,7 +20,7 @@ const addRecipetShema = Joi.object({
 });
 
 const IngrSchema = new Schema({
-    id: { type: String },
+    id: { type: Schema.Types.ObjectId, ref: 'Ingredient', },
     measure: { type: String }
 });
 

@@ -24,7 +24,7 @@ const getListsByCategories = async (req, res) => {
   const categoryNames = categories.map((category) => category.name).sort();
   const recipes = await Promise.all(
     categoryNames.map(async (category) => {
-      const result = await Recipe.find({ category });
+      const result = await Recipe.find({ category }).limit(4);
       return { [category]: result };
     })
   );
@@ -49,7 +49,7 @@ const getListsByCategoriesPage = async (req, res) => {
 const getRecipeById = async (req, res) => {
   const { id } = req.params;
   if (!id) return HttpError(404, "not found");
-  const recipe = await Recipe.findById(id);
+  const recipe = await Recipe.findById(id).populate('ingredients');
   if (!recipe) return HttpError(404, "not found");
   res.status(200).json(recipe);
 };
