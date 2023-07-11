@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
+const gravatar = require("gravatar");
 const fs = require("fs/promises");
 const { nanoid } = require("nanoid");
 const { User } = require("../models/user");
@@ -19,12 +20,13 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
+  const avatarURL = gravatar.url(email, { s: "100", r: "x", d: "wavatar" });
   // const verificationCode = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
-    avatarURL: null,
+    avatarURL,
   });
   const { _id } = newUser;
   const payload = {
@@ -45,7 +47,7 @@ const register = async (req, res) => {
   //     </a>`,
   // };
   // await sendEmail(verifyEmail);
-  console.log(newUser);
+
   res.status(201).json({
     token,
     user: {
@@ -150,7 +152,7 @@ const updateUser = async (req, res) => {
     //     await User.findByIdAndUpdate(_id, { avatarURL });
     // res.json({ avatarURL });
     const { path } = req.file;
-    console.log(path);
+
     const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: path });
     res.json({ avatarURL: path });
   } else {
