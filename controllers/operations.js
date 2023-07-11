@@ -41,8 +41,8 @@ const getAllCategories = async (req, res) => {
 
 const getListsByCategoriesPage = async (req, res) => {
   const { category } = req.params;
-  const { name } = await Category.findById(category);
-  const list = await Recipe.find({ category: name }).limit(8);
+  // const { name } = await Category.findOne({ name: category });
+  const list = await Recipe.find({ category }).limit(8);
   res.status(200).json(list);
 };
 
