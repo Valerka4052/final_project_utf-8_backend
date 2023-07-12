@@ -121,12 +121,9 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, name } = req.user;
+  const { email, name,shoppingList,avatarURL } = req.user;
   console.log(req.user);
-  res.status(200).json({
-    email: email,
-    name: name,
-  });
+  res.status(200).json({ email, name, shoppingList, avatarURL });
 };
 
 const logout = async (req, res) => {
