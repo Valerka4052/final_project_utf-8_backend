@@ -70,9 +70,12 @@ const searchRecipes = async (req, res) => {
 };
 
 const getAllIngredients = async (req, res) => {
-  const ingredients = await Ingredient.find();
-  if (!ingredients) throw HttpError(404, "not found");
-  res.status(200).json(ingredients);
+  const { recipeId } = req.body;
+  const recipe = await Recipe.findById(recipeId).populate('ingredients.id')
+
+  // const ingredients = await Ingredient.find();
+  // if (!ingredients) throw HttpError(404, "not found");
+  res.status(200).json(recipe.ingredients);
 };
 
 const getRecipesByIngredient = async (req, res) => {
