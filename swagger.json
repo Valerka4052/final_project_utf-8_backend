@@ -1,0 +1,178 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "So_yummy Project ",
+    "description": "Team project So_yummy by Swagger OpenAPI 3.0",
+    "version": "5.0.0"
+  },
+
+  "consumes": ["application/json", "multipart/form-data"],
+  "produces": ["application/json", "multipart/form-data"],
+
+  "servers": [{ "url": "https://final-project-utf-8-backend.onrender.com" }],
+
+  "tags": [
+    {
+      "name": "users",
+      "description": "register, login, logout and update some information"
+    },
+    { "name": "recipes", "description": "Add, delete nad get recipes" },
+    { "name": "ingredients", "description": "Add, delete nad get ingredients" },
+    { "name": "ownRecipes", "description": "Add, delete nad get recipes" },
+    { "name": "favorite", "description": "Add, delete nad get recipes" }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User registering",
+        "requestBody": {
+          "description": "Registration object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email"
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "User's name",
+                    "example": "Volodya"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+
+                    "example": "V4602323"
+                  }
+                },
+                "required": ["email", "name", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Provided email already exists"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "User loginig",
+        "requestBody": {
+          "description": "Login object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email"
+                  },
+                  "password": {
+                    "type": "string",
+                    "description": "User's password",
+
+                    "example": "V4602323"
+                  }
+                },
+                "required": ["email", "password"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "User logining successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Email or password is wrong"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Logout user",
+        "responses": {
+          "204": {
+            "description": "User logouting successfully"
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get user information ",
+        "responses": {
+          "200": {
+            "description": "User logouting successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AuthResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email"
+          },
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "avatarURL": {
+            "type": "string",
+            "description": "User's temporary avatar"
+          },
+          "shoppingList": {
+            "type": "array",
+            "items": { "type": "object" },
+            "description": "User's shopping list"
+          }
+        }
+      }
+    }
+  }
+}
