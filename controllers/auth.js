@@ -20,7 +20,11 @@ const register = async (req, res) => {
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
-  const avatarURL = gravatar.url(email, { s: "100", r: "x", d: "wavatar" });
+  const avatarURL = gravatar.url(
+    email,
+    { s: "100", r: "x", d: "wavatar" },
+    false
+  );
   // const verificationCode = nanoid();
 
   const newUser = await User.create({
@@ -121,8 +125,8 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, name,shoppingList,avatarURL } = req.user;
-  console.log(req.user);
+  const { email, name, shoppingList, avatarURL } = req.user;
+
   res.status(200).json({ email, name, shoppingList, avatarURL });
 };
 

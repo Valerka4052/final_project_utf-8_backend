@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
+const swaggerUi = require("swagger-ui-express");
 const cors = require("cors");
 require("dotenv").config();
 // const operationsRouter = require("./route/operations");
+const swaggerDocument = require("./swagger.json");
 const authRouter = require("./route/auth");
 const operationsRouter = require("./route/operations");
 
@@ -13,6 +15,7 @@ app.use(express.static("public"));
 // тут повинні бути роути
 app.use("/users", authRouter);
 app.use("/", operationsRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // тут повинні бути роути
 
 app.use((req, res) => {

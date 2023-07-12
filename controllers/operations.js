@@ -6,6 +6,11 @@ const { ObjectId } = require("mongoose").Types;
 const { funcWrapper, HttpError, sendEmail } = require("../helpers");
 
 const subscribe = async (req, res) => {
+  const { _id } = req.user;
+  const { email } = req.body;
+  const subscribeEmail = email;
+
+  await User.findByIdAndUpdate(_id, { subscribeEmail });
   const verifyEmail = {
     to: email,
     subject: "Subscribe",
@@ -49,7 +54,7 @@ const getListsByCategoriesPage = async (req, res) => {
 const getRecipeById = async (req, res) => {
   const { id } = req.params;
   if (!id) return HttpError(404, "not found");
-  const recipe = await Recipe.findById(id).populate('ingredients');
+  const recipe = await Recipe.findById(id).populate("ingredients");
   if (!recipe) return HttpError(404, "not found");
   res.status(200).json(recipe);
 };
