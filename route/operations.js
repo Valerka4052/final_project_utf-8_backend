@@ -32,7 +32,7 @@ operationsRouter.get('/recipes/category-list', authenticate, getAllCategories);
 operationsRouter.get('/recipes/category/:category', authenticate, getListsByCategoriesPage);
 operationsRouter.get('/recipes/:id', isValid, authenticate, getRecipeById);
 operationsRouter.post('/search', authenticate, searchRecipes);
-operationsRouter.post('/ingredients/list', authenticate, getAllIngredients);
+operationsRouter.get('/ingredients/list', authenticate, getAllIngredients);
 operationsRouter.post('/ingredients', authenticate,  getRecipesByIngredient);
 operationsRouter.get('/ownRecipes', authenticate, getRecipeByUser);
 operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"), addRecipe);
