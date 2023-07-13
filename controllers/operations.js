@@ -54,7 +54,7 @@ const getListsByCategoriesPage = async (req, res) => {
 const getRecipeById = async (req, res) => {
   const { id } = req.params;
   if (!id) return HttpError(404, "not found");
-  const recipe = await Recipe.findById(id).populate("ingredients");
+  const recipe = await Recipe.findById(id).populate("ingredients.id");
   if (!recipe) return HttpError(404, "not found");
   res.status(200).json(recipe);
 };
@@ -70,17 +70,22 @@ const searchRecipes = async (req, res) => {
 };
 
 const getAllIngredients = async (req, res) => {
-  const { recipeId } = req.body;
-  const recipe = await Recipe.findById(recipeId).populate('ingredients.id')
+  // const { recipeId } = req.body;
+  // const recipe = await Recipe.findById(recipeId).populate('ingredients.id')
 
-  // const ingredients = await Ingredient.find();
-  // if (!ingredients) throw HttpError(404, "not found");
+  const ingredients = await Ingredient.find();
+  if (!ingredients) throw HttpError(404, "not found");
   res.status(200).json(recipe.ingredients);
 };
 
 const getRecipesByIngredient = async (req, res) => {
-  const { name } = req.body;
-  const recipes = await Recipe.find({ ingredients: { $elemMatch: { name } } });
+  const { search } = req.body;
+  const ingredients = await Ingredient.find({ name: { $regex: search, $options: "i" }, });
+  const ingrIds = ingredients.map(ingredient => ingredient.id);
+  console.log(ingrIds);
+  // const result = await Ingredient.findById(id)
+  // console.log(result._id);
+  const recipes = await Recipe.find({ ingredients: { $elemMatch: {id} } })
   if (!recipes) return HttpError(404, "not found");
   res.status(200).json(recipes);
 };
@@ -236,3 +241,6 @@ module.exports = {
   removeProductFromSoppingList: funcWrapper(removeProductFromSoppingList),
   getUserInfo: funcWrapper(getUserInfo),
 };
+
+
+

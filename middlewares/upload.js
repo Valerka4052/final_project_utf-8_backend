@@ -44,7 +44,7 @@ const storage = new CloudinaryStorage({
       public_id: file.originalname, // Use original filename as the public ID
       transformation: [
         { width: 350, height: 350 },
-        { width: 700, height: 700 },
+        { width: 700, height: 700, crop: 'fill' },
       ],
     };
   },
