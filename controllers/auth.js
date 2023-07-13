@@ -58,7 +58,6 @@ const register = async (req, res) => {
       email: newUser.email,
       name: newUser.name,
       avatarURL: newUser.avatarURL,
-      shoppingList: newUser.shoppingList,
     },
   });
 };
@@ -119,7 +118,6 @@ const login = async (req, res) => {
       email: user.email,
       name: user.name,
       avatarURL: user.avatarURL,
-      shoppingList: user.shoppingList,
     },
   });
 };
@@ -127,7 +125,7 @@ const login = async (req, res) => {
 const getCurrent = async (req, res) => {
   const { email, name, shoppingList, avatarURL } = req.user;
 
-  res.status(200).json({ email, name, shoppingList, avatarURL });
+  res.status(200).json({ email, name, avatarURL });
 };
 
 const logout = async (req, res) => {
@@ -143,7 +141,7 @@ const updateUser = async (req, res) => {
 
   if (!req.file) {
     await User.findByIdAndUpdate(_id, { name });
-    res.json({ name });
+    res.status(200).json({ name });
   } else if (bodyLength === 0) {
     // const { path: tempUpload, originalname } = req.file;
     // const filename = `${_id}_${originalname}`;
@@ -155,7 +153,7 @@ const updateUser = async (req, res) => {
     const { path } = req.file;
 
     const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: path });
-    res.json({ avatarURL: path });
+    res.status(200).json({ avatarURL: path });
   } else {
     // const { path: tempUpload, originalname } = req.file;
     // const filename = `${_id}_${originalname}`;
@@ -170,7 +168,9 @@ const updateUser = async (req, res) => {
       avatarURL: path,
       name,
     });
-    res.json({ avatarURL: updatedUser.avatarURL, name: updatedUser.name });
+    res
+      .status(200)
+      .json({ avatarURL: updatedUser.avatarURL, name: updatedUser.name });
   }
 };
 
