@@ -46,17 +46,18 @@ const getAllCategories = async (req, res) => {
 
 const getListsByCategoriesPage = async (req, res) => {
   const { category } = req.params;
-  // const { name } = await Category.findOne({ name: category });
   const list = await Recipe.find({ category }).limit(8);
   res.status(200).json(list);
 };
 
 const getRecipeById = async (req, res) => {
+  const {id:userId}=req.user
   const { id } = req.params;
   if (!id) return HttpError(404, "not found");
   const recipe = await Recipe.findById(id).populate("ingredients.id");
   if (!recipe) return HttpError(404, "not found");
-  res.status(200).json(recipe);
+  const isFavorite = recipe.favorite.some(favorite => favorite.id === userId);
+  res.status(200).json({...recipe._doc,isFavorite});
 };
 
 const searchRecipes = async (req, res) => {
@@ -70,48 +71,19 @@ const searchRecipes = async (req, res) => {
 };
 
 const getAllIngredients = async (req, res) => {
-  // const { recipeId } = req.body;
-  // const recipe = await Recipe.findById(recipeId).populate('ingredients.id')
   const ingredients = await Ingredient.find();
   if (!ingredients) throw HttpError(404, "not found");
   res.status(200).json(ingredients);
 };
+
 const getRecipesByIngredient = async (req, res) => {
   const { search } = req.body;
-  // const ingredients = await Ingredient.find({ name: { $regex: search, $options: "i" }, });
-  // const ingrIds = ingredients.map(ingredient => ingredient._id);
-  // console.log(ingrIds);
-  const ingredient = await Ingredient.findOne({
-    name: { $regex: search, $options: "i" },
-  });
-
-  console.log(ingredient);
-  // const recipes = await Recipe.find({
-  //   "ingredients.id": "640c2dd963a319ea671e3724",
-  // });
-
-  const recipes = await Recipe.find({
-    ingredients: { $elemMatch: { id: ingredient.id } },
-  });
-  console.log("🚀 ~ recipes:", recipes);
-  // const recipes = await Recipe.find({ ingredients: { $elemMatch: { id: ingredient._id } } });
+  const ingredients = await Ingredient.find({ name: { $regex: search, $options: "i" }, });
+  const ingrIds = ingredients.map(ingredient => ingredient.id);
+  const recipes = await Recipe.find({ ingredients: { $elemMatch: { id:{ $in: ingrIds} } } });
   if (!recipes) return HttpError(404, "not found");
-
   res.status(200).json(recipes);
 };
-
-// const getRecipesByIngredient = async (req, res) => {
-//   const { search } = req.body;
-//   // const ingredients = await Ingredient.find({ name: { $regex: search, $options: "i" }, });
-//   // const ingrIds = ingredients.map(ingredient => ingredient._id);
-//   // console.log(ingrIds);
-//     const ingredient = await Ingredient.findOne({ name: { $regex: search, $options: "i" }, });
-//   console.log(ingredient.id);
-//   const recipes = await Recipe.find({ ingredients: { $elemMatch: { id: ingredient.id } } });
-//   // const recipes = await Recipe.find({ ingredients: { $elemMatch: { id: ingredient._id } } });
-//   if (!recipes) return HttpError(404, "not found");
-//   res.status(200).json(recipes);
-// };
 
 const getRecipeByUser = async (req, res) => {
   const { _id } = req.user;
@@ -145,32 +117,29 @@ const getFavoriteRecipeByUser = async (req, res) => {
   if (!userRecipes) throw HttpError(404, "recipes not found");
   return res.status(200).json(userRecipes);
 };
-
+// -------------------------
 const addRecipeToFavorite = async (req, res) => {
-  const { _id } = req.user;
   const { id: resId } = req.body;
   const updatedReciepe = await Recipe.findByIdAndUpdate(
     resId,
-    { $push: { favorite: { _id } } },
+    { $push: { favorite:{id: req.user.id} } },
     { new: true }
   );
+console.log();
   if (!updatedReciepe) return HttpError(404, "recipes not found");
   return res.status(200).json(updatedReciepe);
 };
 
 const deleteRecipeFromFavorite = async (req, res) => {
-  const { _id } = req.user;
+  const { id } = req.user;
   const { id: resId } = req.body;
   const deletedFromFavorite = await Recipe.findByIdAndUpdate(
     resId,
-    { $pull: { favorite: { _id: _id } } },
+    { $pull: { favorite: { id } } },
     { new: true }
   );
   if (!deletedFromFavorite) throw HttpError(404, "recipes not found");
-  res.status(200).json("succses");
-  // const deletedFromFavorite = await Recipe.findOneAndDelete({ _id: resId, favorite: _id });
-  //  if (deletedFromFavorite === null) throw HttpError(404, 'not found');
-  // res.status(200).json({ message: 'recipe is deleted from favorite' });
+  res.status(200).json(deletedFromFavorite);
 };
 
 const getPouplarRecipes = async (req, res) => {

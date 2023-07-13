@@ -72,7 +72,7 @@ const recipeSchema = new Schema({
         ref: 'user',
     },
     favorite: {
-        type: [{ id: { type: Schema.Types.ObjectId, ref: 'user', } }],
+        type: [{ id: { type: String, ref: 'user', } }],
         default:[],
     }
 }, {
