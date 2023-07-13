@@ -9,7 +9,10 @@
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json", "multipart/form-data"],
 
-  "servers": [{ "url": "https://final-project-utf-8-backend.onrender.com" }],
+  "servers": [
+    { "url": "https://final-project-utf-8-backend.onrender.com" },
+    { "url": "http://localhost:3001" }
+  ],
 
   "tags": [
     {
@@ -69,6 +72,9 @@
           },
           "409": {
             "description": "Provided email already exists"
+          },
+          "400": {
+            "description": "Missing fields"
           }
         }
       }
@@ -115,6 +121,9 @@
           },
           "401": {
             "description": "Email or password is wrong"
+          },
+          "400": {
+            "description": "Missing fields"
           }
         }
       }
@@ -122,10 +131,14 @@
     "/users/logout": {
       "post": {
         "tags": ["Users"],
+        "security": [{ "Bearer": [] }],
         "summary": "Logout user",
         "responses": {
           "204": {
             "description": "User logouting successfully"
+          },
+          "401": {
+            "description": "Not authorized"
           }
         }
       }
@@ -133,10 +146,11 @@
     "/users/current": {
       "get": {
         "tags": ["Users"],
+        "security": [{ "Bearer": [] }],
         "summary": "Get user information ",
         "responses": {
           "200": {
-            "description": "User logouting successfully",
+            "description": "Get user information successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -144,6 +158,60 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Not authorized"
+          }
+        }
+      }
+    },
+    "/users/update": {
+      "patch": {
+        "tags": ["Users"],
+        "security": [{ "Bearer": [] }],
+        "summary": "User update some information",
+        "requestBody": {
+          "description": "update object",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+
+                    "description": "User's name"
+                  },
+                  "avatarURL": {
+                    "type": "string",
+
+                    "description": "User's  avatar",
+                    "example": "http://www.gravatar.com/avatar/26ff068050ca831bbff5bcae0cb45723?s=100&r=x&d=wavatar"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": " Successfully",
+            "content": {
+              "name": {
+                "type": "string",
+
+                "description": "User's name"
+              },
+              "avatarURL": {
+                "type": "string",
+                "example": "http://www.gravatar.com/avatar/26ff068050ca831bbff5bcae0cb45723?s=100&r=x&d=wavatar",
+                "description": "User's  avatar"
+              }
+            }
+          },
+          "401": {
+            "description": "Email or password is wrong"
           }
         }
       }
@@ -165,13 +233,15 @@
           "avatarURL": {
             "type": "string",
             "description": "User's temporary avatar"
-          },
-          "shoppingList": {
-            "type": "array",
-            "items": { "type": "object" },
-            "description": "User's shopping list"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
