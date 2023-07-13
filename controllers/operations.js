@@ -76,19 +76,42 @@ const getAllIngredients = async (req, res) => {
   if (!ingredients) throw HttpError(404, "not found");
   res.status(200).json(ingredients);
 };
-
 const getRecipesByIngredient = async (req, res) => {
   const { search } = req.body;
   // const ingredients = await Ingredient.find({ name: { $regex: search, $options: "i" }, });
   // const ingrIds = ingredients.map(ingredient => ingredient._id);
   // console.log(ingrIds);
-    const ingredient = await Ingredient.findOne({ name: { $regex: search, $options: "i" }, });
-  console.log(ingredient.id);
-  const recipes = await Recipe.find({ ingredients: { $elemMatch: { id: ingredient.id } } });
+  const ingredient = await Ingredient.findOne({
+    name: { $regex: search, $options: "i" },
+  });
+
+  console.log(ingredient);
+  // const recipes = await Recipe.find({
+  //   "ingredients.id": "640c2dd963a319ea671e3724",
+  // });
+
+  const recipes = await Recipe.find({
+    ingredients: { $elemMatch: { id: ingredient.id } },
+  });
+  console.log("🚀 ~ recipes:", recipes);
   // const recipes = await Recipe.find({ ingredients: { $elemMatch: { id: ingredient._id } } });
   if (!recipes) return HttpError(404, "not found");
+
   res.status(200).json(recipes);
 };
+
+// const getRecipesByIngredient = async (req, res) => {
+//   const { search } = req.body;
+//   // const ingredients = await Ingredient.find({ name: { $regex: search, $options: "i" }, });
+//   // const ingrIds = ingredients.map(ingredient => ingredient._id);
+//   // console.log(ingrIds);
+//     const ingredient = await Ingredient.findOne({ name: { $regex: search, $options: "i" }, });
+//   console.log(ingredient.id);
+//   const recipes = await Recipe.find({ ingredients: { $elemMatch: { id: ingredient.id } } });
+//   // const recipes = await Recipe.find({ ingredients: { $elemMatch: { id: ingredient._id } } });
+//   if (!recipes) return HttpError(404, "not found");
+//   res.status(200).json(recipes);
+// };
 
 const getRecipeByUser = async (req, res) => {
   const { _id } = req.user;

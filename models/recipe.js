@@ -19,9 +19,13 @@ const addRecipetShema = Joi.object({
     'object.missing': 'Fields {#context.missing} are missing'
 });
 
+// const IngrSchema = new Schema({
+//     id: { type: Schema.Types.ObjectId, ref: 'Ingredient', },
+//     measure: { type: String }
+// });
 const IngrSchema = new Schema({
-    id: { type: Schema.Types.ObjectId, ref: 'Ingredient', },
-    measure: { type: String }
+  id: { type: String, ref: "Ingredient" },
+  measure: { type: String },
 });
 
 const recipeSchema = new Schema({
