@@ -75,7 +75,7 @@ const getAllIngredients = async (req, res) => {
 
   const ingredients = await Ingredient.find();
   if (!ingredients) throw HttpError(404, "not found");
-  res.status(200).json(recipe.ingredients);
+  res.status(200).json(ingredients);
 };
 
 const getRecipesByIngredient = async (req, res) => {
