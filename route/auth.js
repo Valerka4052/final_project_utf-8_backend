@@ -24,6 +24,11 @@ authRouter.post(
   validateBody.validateBodyPost(schemas.loginSchema),
   ctrl.login
 );
+authRouter.post(
+  "/refresh",
+  validateBody.validateBodyPost(schemas.refreshSchema),
+  ctrl.refresh
+);
 
 authRouter.get("/current", authenticate, ctrl.getCurrent);
 
