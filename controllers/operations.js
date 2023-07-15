@@ -24,12 +24,13 @@ const subscribe = async (req, res) => {
 };
 
 const getListsByCategories = async (req, res) => {
-  const categories = await Category.find();
-  if (!categories) return HttpError(404, "categories not found");
-  const categoryNames = categories.map((category) => category.name).sort();
+  // const categories = await Category.find();
+  // if (!categories) return HttpError(404, "categories not found");
+  // const categoryNames = categories.map((category) => category.name).sort();
+  const categories = ['Breakfast', 'Miscellaneous', 'Chicken', 'Dessert'];
   const recipes = await Promise.all(
-    categoryNames.map(async (category) => {
-      const result = await Recipe.find({ category }).limit(4);
+    categories.map(async (category) => {
+      const result = await Recipe.find({ category }).populate("ingredients.id").limit(4);
       return { [category]: result };
     })
   );
