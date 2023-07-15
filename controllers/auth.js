@@ -217,6 +217,25 @@ const updateUser = async (req, res) => {
       .json({ avatarURL: updatedUser.avatarURL, name: updatedUser.name });
   }
 };
+const googleAuth = async (req, res) => {
+  const { _id: id } = req.user;
+  const payload = {
+    id,
+  };
+  const { avatarURL } = req.user;
+  const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
+    expiresIn: "2m",
+  });
+  const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
+    expiresIn: "7d",
+  });
+  await User.findByIdAndUpdate(id, { accessToken, refreshToken });
+  res.redirect(
+    `http://localhost:3001/users/register?accessToken=${accessToken}&refreshToken=${refreshToken}&avatarURL=${avatarURL}`
+  ); // перекинуть на фронт , на гласную страницу и в пареметрах передать токены
+
+  console.log(req.user);
+};
 
 module.exports = {
   register: funcWrapper(register),
@@ -225,6 +244,7 @@ module.exports = {
   logout: funcWrapper(logout),
   updateUser: funcWrapper(updateUser),
   refresh: funcWrapper(refresh),
+  googleAuth: funcWrapper(googleAuth),
 
   // verifyEmail: funcWrapper(verifyEmail),
   // resendVerifyEmail: funcWrapper(resendVerifyEmail),
