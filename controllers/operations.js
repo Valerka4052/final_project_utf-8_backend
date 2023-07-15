@@ -88,10 +88,14 @@ const getRecipesByIngredient = async (req, res) => {
 
 const getRecipeByUser = async (req, res) => {
   const { _id } = req.user;
-  console.log(_id);
-  const recipes = await Recipe.find({ owner: _id });
+  const { page = 1 } = req.query;
+  const limit = 4
+  const skip = (page - 1);
+  const recipesLength = await Recipe.find({ owner: _id }).length;
+  const totalPages = Math.ceil(recipesLength / limit);
+  const recipes = await Recipe.find({ owner: _id }).skip(skip).limit(limit);
   if (!recipes) return HttpError(404, "recipes not found");
-  res.status(200).json(recipes);
+  res.status(200).json({ recipes, totalPages});
 };
 
 const addRecipe = async (req, res) => {
@@ -113,10 +117,16 @@ const deleteRecipe = async (req, res) => {
 };
 
 const getFavoriteRecipeByUser = async (req, res) => {
+  const { page = 1 } = req.query;
+  const limit = 4
   const { _id } = req.user;
-  const userRecipes = await Recipe.find({ favorite: { $elemMatch: { _id } } });
+  const skip = (page - 1);
+  const recipes = (await Recipe.find({ favorite: { $elemMatch: { _id } } })).length;
+  const totalPages = Math.ceil(recipes / limit);
+  console.log('totalPages',totalPages);
+  const userRecipes = await Recipe.find({ favorite: { $elemMatch: { _id } } }).skip(skip).limit(limit);
   if (!userRecipes) throw HttpError(404, "recipes not found");
-  return res.status(200).json(userRecipes);
+  return res.status(200).json({ favorites: userRecipes, totalPages });
 };
 // -------------------------
 const addRecipeToFavorite = async (req, res) => {
