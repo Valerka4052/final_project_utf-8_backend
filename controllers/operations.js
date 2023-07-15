@@ -4,7 +4,7 @@ const { Ingredient } = require("../models/ingredient");
 const { User } = require("../models/user");
 const { ObjectId } = require("mongoose").Types;
 const { funcWrapper, HttpError, sendEmail } = require("../helpers");
-
+const shortid = require('shortid')
 const subscribe = async (req, res) => {
   const { _id } = req.user;
   const { email } = req.body;
@@ -166,12 +166,12 @@ const getPouplarRecipes = async (req, res) => {
 
 const addProductToSoppingList = async (req, res) => {
   const { _id: userId } = req.user;
-  const { id, measure } = req.body;
+  const { ingredientId,identId, measure } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $push: { shoppingList: { _id: id, measure } } },
+    { $push: { shoppingList: { _id: ingredientId, measure, id: identId } } },
     { new: true }
-  );
+  ).populate("shoppingList._id");
   if (!updatedUser) throw HttpError(404, "not found");
   return res.status(200).json(updatedUser.shoppingList);
 };
@@ -181,15 +181,15 @@ const removeProductFromSoppingList = async (req, res) => {
   const { id } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $pull: { shoppingList: { _id: id } } },
+    { $pull: { shoppingList: { id } } },
     { new: true }
-  );
+  )
   if (!updatedUser) throw HttpError(404, "not found");
   return res.status(200).json(updatedUser.shoppingList);
 };
 const getShoppingList = async (req, res) => {
   const { _id } = req.user;
-  const user = await User.findById(_id).populate("shoppingList");
+  const user = await User.findById(_id).populate("shoppingList._id");
   if (!user) return HttpError(404, "not found");
   const list = user.shoppingList;
   res.status(200).json(list);
