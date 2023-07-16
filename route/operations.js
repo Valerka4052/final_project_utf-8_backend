@@ -42,7 +42,7 @@ operationsRouter.post('/favorite', authenticate, isValidIdByReqBody, addRecipeTo
 operationsRouter.patch('/favorite', authenticate, isValidIdByReqBody, deleteRecipeFromFavorite);
 operationsRouter.get('/popular-recipe', authenticate, getPouplarRecipes);
 operationsRouter.post('/shopping-list', authenticate,  addProductToSoppingList);
-operationsRouter.patch('/shopping-list', authenticate, isValidIdByReqBody, removeProductFromSoppingList);
+operationsRouter.patch('/shopping-list', authenticate,  removeProductFromSoppingList);
 operationsRouter.get('/shopping-list', authenticate, getShoppingList);
 operationsRouter.get('/user-info', authenticate, getUserInfo);
 
