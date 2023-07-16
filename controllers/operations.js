@@ -176,12 +176,12 @@ const getPouplarRecipes = async (req, res) => {
 
 const addProductToSoppingList = async (req, res) => {
   const { _id: userId } = req.user;
-  const { ingredientId,identId, measure } = req.body;
+  const { ingredientId, identId, measure } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
     { $push: { shoppingList: { _id: ingredientId, measure, id: identId } } },
     { new: true }
-  ).populate("shoppingList._id");
+  )
   if (!updatedUser) throw HttpError(404, "not found");
   return res.status(200).json(updatedUser.shoppingList);
 };

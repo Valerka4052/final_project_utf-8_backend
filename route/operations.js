@@ -41,7 +41,7 @@ operationsRouter.get('/favorite', authenticate, getFavoriteRecipeByUser);
 operationsRouter.post('/favorite', authenticate, isValidIdByReqBody, addRecipeToFavorite);
 operationsRouter.patch('/favorite', authenticate, isValidIdByReqBody, deleteRecipeFromFavorite);
 operationsRouter.get('/popular-recipe', authenticate, getPouplarRecipes);
-operationsRouter.post('/shopping-list', authenticate, isValidIdByReqBody, addProductToSoppingList);
+operationsRouter.post('/shopping-list', authenticate,  addProductToSoppingList);
 operationsRouter.patch('/shopping-list', authenticate, isValidIdByReqBody, removeProductFromSoppingList);
 operationsRouter.get('/shopping-list', authenticate, getShoppingList);
 operationsRouter.get('/user-info', authenticate, getUserInfo);
