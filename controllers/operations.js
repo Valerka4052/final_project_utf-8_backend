@@ -21,6 +21,7 @@ const subscribe = async (req, res) => {
       </h1>`,
   };
   await sendEmail(verifyEmail);
+  res.status(200).json({ message: 'sucsess' });
 };
 
 const getListsByCategories = async (req, res) => {
@@ -63,12 +64,16 @@ const getRecipeById = async (req, res) => {
 
 const searchRecipes = async (req, res) => {
   const { search } = req.body;
+  const { page = 1 } = req.query;
+  const limit = 8
+  const { _id } = req.user;
+  const skip = (page - 1);
+  const recipesLength = await Recipe.find({ title: { $regex: search, $options: "i" }, })
+  const totalPages = Math.ceil(recipesLength.length / limit);
   if (!search) return HttpError(404, "not found");
-  const recipes = await Recipe.find({
-    title: { $regex: search, $options: "i" },
-  });
+  const recipes = await Recipe.find({ title: { $regex: search, $options: "i" }, }).skip(skip).limit(limit);
   if (!recipes) return HttpError(404, "not found");
-  res.status(200).json(recipes);
+  res.status(200).json({ recipes, totalPages });
 };
 
 const getAllIngredients = async (req, res) => {
@@ -79,11 +84,17 @@ const getAllIngredients = async (req, res) => {
 
 const getRecipesByIngredient = async (req, res) => {
   const { search } = req.body;
+   const { page = 1 } = req.query;
+  const limit = 8
+  const { _id } = req.user;
+  const skip = (page - 1);
   const ingredients = await Ingredient.find({ name: { $regex: search, $options: "i" }, });
   const ingrIds = ingredients.map(ingredient => ingredient.id);
-  const recipes = await Recipe.find({ ingredients: { $elemMatch: { id:{ $in: ingrIds} } } });
+  const recipesLength = await Recipe.find({ ingredients: { $elemMatch: { id: { $in: ingrIds } } } });
+  const totalPages = Math.ceil(recipesLength.length / limit);
+  const recipes = await Recipe.find({ ingredients: { $elemMatch: { id: { $in: ingrIds } } } }).skip(skip).limit(limit);
   if (!recipes) return HttpError(404, "not found");
-  res.status(200).json(recipes);
+  res.status(200).json({recipes,totalPages});
 };
 
 const getRecipeByUser = async (req, res) => {
