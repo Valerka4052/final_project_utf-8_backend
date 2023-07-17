@@ -2,9 +2,7 @@ const { Recipe } = require("../models/recipe");
 const { Category } = require("../models/categories");
 const { Ingredient } = require("../models/ingredient");
 const { User } = require("../models/user");
-const { ObjectId } = require("mongoose").Types;
 const { funcWrapper, HttpError, sendEmail } = require("../helpers");
-const shortid = require('shortid')
 const subscribe = async (req, res) => {
   const { _id } = req.user;
   const { email } = req.body;
@@ -49,6 +47,7 @@ const getAllCategories = async (req, res) => {
 const getListsByCategoriesPage = async (req, res) => {
   const { category } = req.params;
   const list = await Recipe.find({ category }).limit(8);
+  if (!list) return HttpError(404, "not found");
   res.status(200).json(list);
 };
 
@@ -63,9 +62,8 @@ const getRecipeById = async (req, res) => {
 };
 
 const searchRecipes = async (req, res) => {
-  const { search } = req.body;
-  const { page = 1 } = req.query;
-  const limit = 8
+  // const { search } = req.body;
+  const { page = 1, search, limit = 8 } = req.query;
   const { _id } = req.user;
   const skip = (page - 1);
   const recipesLength = await Recipe.find({ title: { $regex: search, $options: "i" }, })
@@ -83,9 +81,8 @@ const getAllIngredients = async (req, res) => {
 };
 
 const getRecipesByIngredient = async (req, res) => {
-  const { search } = req.body;
-   const { page = 1 } = req.query;
-  const limit = 8
+  // const { search } = req.body;
+  const { page = 1, search, limit = 8 } = req.query;
   const { _id } = req.user;
   const skip = (page - 1);
   const ingredients = await Ingredient.find({ name: { $regex: search, $options: "i" }, });
@@ -99,8 +96,7 @@ const getRecipesByIngredient = async (req, res) => {
 
 const getRecipeByUser = async (req, res) => {
   const { _id } = req.user;
-  const { page = 1 } = req.query;
-  const limit = 4
+  const { page = 1, limit = 4 } = req.query;
   const skip = (page - 1);
   const recipesLength = await Recipe.find({ owner: _id }).length;
   const totalPages = Math.ceil(recipesLength / limit);
@@ -113,33 +109,30 @@ const addRecipe = async (req, res) => {
   const { _id } = req.user;
   const { path } = req.file;
   console.log("req.body", req.body);
-  // const recipe = await Recipe.create({ ...req.body, owner: _id })
-  // if (!recipe) return HttpError(404, 'not found');
-  res.status(200).json(req.file);
+  const recipe = await Recipe.create({ ...req.body, owner: _id })
+  if (!recipe) return HttpError(404, 'not found');
+  res.status(200).json(recipe);
 };
 
 const deleteRecipe = async (req, res) => {
   const { _id } = req.user;
   const { id } = req.body;
-  console.log(id);
   const deletedRecipe = await Recipe.findOneAndDelete({ owner: _id, _id: id });
   if (!deletedRecipe) return HttpError(404, "not found");
   res.status(200).json({ message: "recipe is deleted" });
 };
 
 const getFavoriteRecipeByUser = async (req, res) => {
-  const { page = 1 } = req.query;
-  const limit = 4
+  const { page = 1, limit = 4 } = req.query;
   const { _id } = req.user;
   const skip = (page - 1);
   const recipes = (await Recipe.find({ favorite: { $elemMatch: { _id } } })).length;
   const totalPages = Math.ceil(recipes / limit);
-  console.log('totalPages',totalPages);
   const userRecipes = await Recipe.find({ favorite: { $elemMatch: { _id } } }).skip(skip).limit(limit);
   if (!userRecipes) throw HttpError(404, "recipes not found");
   return res.status(200).json({ favorites: userRecipes, totalPages });
 };
-// -------------------------
+
 const addRecipeToFavorite = async (req, res) => {
   const { id: resId } = req.body;
   const updatedReciepe = await Recipe.findByIdAndUpdate(
@@ -147,7 +140,6 @@ const addRecipeToFavorite = async (req, res) => {
     { $push: { favorite:{id: req.user.id} } },
     { new: true }
   );
-console.log();
   if (!updatedReciepe) return HttpError(404, "recipes not found");
   return res.status(200).json(updatedReciepe);
 };
@@ -160,13 +152,13 @@ const deleteRecipeFromFavorite = async (req, res) => {
     { $pull: { favorite: { id } } },
     { new: true }
   );
-  if (!deletedFromFavorite) throw HttpError(404, "recipes not found");
+  if (!deletedFromFavorite) return HttpError(404, "recipes not found");
   res.status(200).json(deletedFromFavorite);
 };
 
 const getPouplarRecipes = async (req, res) => {
   const recipes = await Recipe.find();
-  if (!recipes) throw HttpError(404, "recipes not found");
+  if (!recipes) return HttpError(404, "recipes not found");
   const filteredRecipes = recipes.map((recipe) => {
     if (!recipe.favorite) {
       return (recipe.favorite = []);
@@ -193,7 +185,7 @@ const addProductToSoppingList = async (req, res) => {
     { $push: { shoppingList: { _id: ingredientId, measure, id: identId, recipeId } } },
     { new: true }
   )
-  if (!updatedUser) throw HttpError(404, "not found");
+  if (!updatedUser) return HttpError(404, "not found");
   return res.status(200).json(updatedUser.shoppingList);
 };
 
@@ -205,7 +197,7 @@ const removeProductFromSoppingList = async (req, res) => {
     { $pull: { shoppingList: { id } } },
     { new: true }
   )
-  if (!updatedUser) throw HttpError(404, "not found");
+  if (!updatedUser) return HttpError(404, "not found");
   return res.status(200).json(updatedUser.shoppingList);
 };
 const getShoppingList = async (req, res) => {
@@ -218,11 +210,11 @@ const getShoppingList = async (req, res) => {
 const getUserInfo = async (req, res) => {
   const { _id } = req.user;
   const user = await User.findById(_id).populate("shoppingList");
-  if (!user) throw HttpError(404, "not found");
+  if (!user) return HttpError(404, "not found");
   const userRecipes = await Recipe.find({
     favorite: { $elemMatch: { _id } },
   }).populate("favorite");
-  if (!userRecipes) throw HttpError(404, "not found");
+  if (!userRecipes) return HttpError(404, "not found");
   const date1 = new Date(user.createdAt);
   const date2 = new Date();
   const difference = date2 - date1;

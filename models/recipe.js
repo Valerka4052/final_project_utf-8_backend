@@ -11,7 +11,6 @@ const addRecipetShema = Joi.object({
     thumb: Joi.string().required(),
     preview: Joi.string().required(),
     time: Joi.string().required(),
-    youtube: Joi.string().required(),
     tags: Joi.array().required(),
     ingredients: Joi.array().required(),
 }).messages({
@@ -19,10 +18,6 @@ const addRecipetShema = Joi.object({
     'object.missing': 'Fields {#context.missing} are missing'
 });
 
-// const IngrSchema = new Schema({
-//     id: { type: Schema.Types.ObjectId, ref: 'Ingredient', },
-//     measure: { type: String }
-// });
 const IngrSchema = new Schema({
   id: { type: String, ref: "Ingredient" },
   measure: { type: String },
@@ -31,23 +26,37 @@ const IngrSchema = new Schema({
 const recipeSchema = new Schema({
     title: {
         type: String,
-        // required: true,
+        required: true,
     },
     category: {
         type: String,
-        // required: true,
+         enum: [
+        "Beef",
+        "Breakfast",
+        "Chicken",
+        "Dessert",
+        "Goat",
+        "Lamb",
+        "Miscellaneous",
+        "Pasta",
+        "Pork",
+        "Seafood",
+        "Side",
+        "Starter",
+        "Vegan",
+        "Vegetarian",
+      ],
     },
     area: {
         type: String,
-        // required: true,
     },
     instructions: {
         type: String,
-        // required: true,
+        required: true,
     },
     description: {
         type: String,
-        // required: true,
+        required: true,
     },
     thumb: {
         type: String,
@@ -59,12 +68,11 @@ const recipeSchema = new Schema({
     },
     time: {
         type: String,
-        // required: true,
+        required: true,
     },
     youtube: {
         type: String,
-        // required: true,
-    },
+       },
     tags:  [String],
     ingredients: [IngrSchema],
     owner: {
