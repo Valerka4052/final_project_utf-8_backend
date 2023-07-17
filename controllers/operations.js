@@ -53,7 +53,7 @@ const getListsByCategoriesPage = async (req, res) => {
 };
 
 const getRecipeById = async (req, res) => {
-  const {id:userId}=req.user
+  const { id: userId } = req.user;
   const { id } = req.params;
   if (!id) return HttpError(404, "not found");
   const recipe = await Recipe.findById(id).populate("ingredients.id");
@@ -187,10 +187,10 @@ const getPouplarRecipes = async (req, res) => {
 
 const addProductToSoppingList = async (req, res) => {
   const { _id: userId } = req.user;
-  const { ingredientId, identId, measure } = req.body;
+  const { ingredientId, identId, measure,recipeId } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $push: { shoppingList: { _id: ingredientId, measure, id: identId } } },
+    { $push: { shoppingList: { _id: ingredientId, measure, id: identId, recipeId } } },
     { new: true }
   )
   if (!updatedUser) throw HttpError(404, "not found");
