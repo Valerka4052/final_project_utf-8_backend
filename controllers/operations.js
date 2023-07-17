@@ -102,14 +102,14 @@ const getRecipeByUser = async (req, res) => {
   const totalPages = Math.ceil(recipesLength / limit);
   const recipes = await Recipe.find({ owner: _id }).skip(skip).limit(limit);
   if (!recipes) return HttpError(404, "recipes not found");
-  res.status(200).json({ recipes, totalPages});
+  res.status(200).json({ recipes, totalPages });
 };
 
 const addRecipe = async (req, res) => {
   const { _id } = req.user;
   const { path } = req.file;
   console.log("req.body", req.body);
-  const recipe = await Recipe.create({ ...req.body, owner: _id })
+  const recipe = await Recipe.create({ ...req.body, preview: path, owner: _id });
   if (!recipe) return HttpError(404, 'not found');
   res.status(200).json(recipe);
 };
