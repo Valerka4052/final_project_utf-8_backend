@@ -22,12 +22,16 @@
     { "name": "recipes", "description": "Add, delete nad get recipes" },
     { "name": "ingredients", "description": "Add, delete nad get ingredients" },
     { "name": "ownRecipes", "description": "Add, delete nad get recipes" },
-    { "name": "favorite", "description": "Add, delete nad get recipes" }
+    { "name": "favorite", "description": "Add, delete nad get recipes" },
+    { "name": "popular-recipe", "description": "Add, delete nad get recipes" },
+    { "name": "shopping-list", "description": "Add, delete nad get recipes" },
+    { "name": "user-info", "description": "User information" },
+    { "name": "subscribe", "description": "Subscribe to newsletter" }
   ],
   "paths": {
     "/users/register": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["users"],
         "summary": "User registering",
         "requestBody": {
           "description": "Registration object",
@@ -81,7 +85,7 @@
     },
     "/users/login": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["users"],
         "summary": "User loginig",
         "requestBody": {
           "description": "Login object",
@@ -119,8 +123,59 @@
               }
             }
           },
-          "401": {
+          "404": {
             "description": "Email or password is wrong"
+          },
+          "400": {
+            "description": "Missing fields"
+          }
+        }
+      }
+    },
+    "/users/refresh": {
+      "post": {
+        "tags": ["users"],
+        "summary": "User refresh tokens",
+        "requestBody": {
+          "description": "User's tokens",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "refreshToken": {
+                    "type": "string",
+
+                    "description": "User's refreshToken"
+                  }
+                },
+                "required": ["refreshToken"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": " Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Token invalid"
           },
           "400": {
             "description": "Missing fields"
@@ -130,7 +185,7 @@
     },
     "/users/logout": {
       "post": {
-        "tags": ["Users"],
+        "tags": ["users"],
         "security": [{ "Bearer": [] }],
         "summary": "Logout user",
         "responses": {
@@ -145,7 +200,7 @@
     },
     "/users/current": {
       "get": {
-        "tags": ["Users"],
+        "tags": ["users"],
         "security": [{ "Bearer": [] }],
         "summary": "Get user information ",
         "responses": {
@@ -167,7 +222,7 @@
     },
     "/users/update": {
       "patch": {
-        "tags": ["Users"],
+        "tags": ["users"],
         "security": [{ "Bearer": [] }],
         "summary": "User update some information",
         "requestBody": {
@@ -198,20 +253,27 @@
           "200": {
             "description": " Successfully",
             "content": {
-              "name": {
-                "type": "string",
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
 
-                "description": "User's name"
-              },
-              "avatarURL": {
-                "type": "string",
-                "example": "http://www.gravatar.com/avatar/26ff068050ca831bbff5bcae0cb45723?s=100&r=x&d=wavatar",
-                "description": "User's  avatar"
+                      "description": "User's name"
+                    },
+                    "avatarURL": {
+                      "type": "string",
+                      "example": "http://www.gravatar.com/avatar/26ff068050ca831bbff5bcae0cb45723?s=100&r=x&d=wavatar",
+                      "description": "User's  avatar"
+                    }
+                  }
+                }
               }
             }
           },
           "401": {
-            "description": "Email or password is wrong"
+            "description": "Not authorized"
           }
         }
       }
@@ -222,6 +284,12 @@
       "AuthResponse": {
         "type": "object",
         "properties": {
+          "accessToken": {
+            "type": "string"
+          },
+          "refreshToken": {
+            "type": "string"
+          },
           "email": {
             "type": "string",
             "description": "User's email"

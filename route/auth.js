@@ -1,9 +1,27 @@
-const { validateBody, authenticate, upload } = require("../middlewares");
+const {
+  validateBody,
+  authenticate,
+  upload,
+  passport,
+} = require("../middlewares");
 
 const { schemas } = require("../models/user");
 const ctrl = require("../controllers/auth");
 const express = require("express");
 const authRouter = express.Router();
+
+authRouter.get(
+  "/google",
+  passport.authenticate("google", {
+    scope: ["email", "profile"],
+  })
+);
+
+authRouter.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false }),
+  ctrl.googleAuth
+);
 
 authRouter.post(
   "/register",
@@ -23,6 +41,11 @@ authRouter.post(
   "/login",
   validateBody.validateBodyPost(schemas.loginSchema),
   ctrl.login
+);
+authRouter.post(
+  "/refresh",
+  validateBody.validateBodyPost(schemas.refreshSchema),
+  ctrl.refresh
 );
 
 authRouter.get("/current", authenticate, ctrl.getCurrent);
