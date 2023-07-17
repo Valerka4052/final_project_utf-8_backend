@@ -222,7 +222,9 @@ const googleAuth = async (req, res) => {
   const payload = {
     id,
   };
-  const { avatarURL } = req.user;
+
+  const { name, avatarURL } = req.user;
+
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
     expiresIn: "2m",
   });
@@ -231,7 +233,7 @@ const googleAuth = async (req, res) => {
   });
   await User.findByIdAndUpdate(id, { accessToken, refreshToken });
   res.redirect(
-    `http://localhost:3001/users/register?accessToken=${accessToken}&refreshToken=${refreshToken}&avatarURL=${avatarURL}`
+    `https://villiav.github.io/final_project_utf-8_front/main?accessToken=${accessToken}&refreshToken=${refreshToken}&avatarURL=${avatarURL}&name=${name}`
   ); // перекинуть на фронт , на гласную страницу и в пареметрах передать токены
 
   console.log(req.user);
