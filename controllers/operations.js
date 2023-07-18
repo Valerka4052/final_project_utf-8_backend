@@ -1,4 +1,4 @@
-const { Recipe } = require("../models/recipe");
+const { Recipe} = require("../models/recipe");
 const { Category } = require("../models/categories");
 const { Ingredient } = require("../models/ingredient");
 const { User } = require("../models/user");

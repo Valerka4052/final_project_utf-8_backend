@@ -2,16 +2,13 @@ const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../helpers');
 const Joi = require('joi');
 
-const addRecipetShema = Joi.object({
+const addRecipeShema = Joi.object({
     title: Joi.string().required(),
     category: Joi.string().required(),
     area: Joi.string().required(),
     instructions: Joi.string().required(),
     description: Joi.string().required(),
-    thumb: Joi.string().required(),
-    preview: Joi.string().required(),
     time: Joi.string().required(),
-    tags: Joi.array().required(),
     ingredients: Joi.array().required(),
 }).messages({
     'any.required': 'missing required {#label} field',
@@ -89,4 +86,4 @@ const recipeSchema = new Schema({
 
 recipeSchema.post("save", handleMongooseError);
 const Recipe = model('Recipe', recipeSchema);
-module.exports = { Recipe, addRecipetShema };
+module.exports = { Recipe, addRecipeShema };

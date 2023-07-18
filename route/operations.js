@@ -25,6 +25,7 @@ const {
     getUserInfo
 } = require('../controllers/operations');
 const upload = require("../middlewares/upload");
+const { addRecipeShema } = require('../models/recipe');
 
 operationsRouter.post('/subscribe', authenticate, subscribe);
 operationsRouter.get('/recipes/main-page', authenticate, getListsByCategories);
@@ -37,7 +38,7 @@ operationsRouter.get('/ingredients/list', authenticate, getAllIngredients);
 // operationsRouter.post('/ingredients', authenticate, getRecipesByIngredient);
 operationsRouter.get('/ingredients', authenticate,  getRecipesByIngredient);
 operationsRouter.get('/ownRecipes', authenticate, getRecipeByUser);
-operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"), addRecipe);
+operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"),validated(addRecipeShema), addRecipe);
 operationsRouter.patch('/ownRecipes', authenticate, isValidIdByReqBody, deleteRecipe);
 operationsRouter.get('/favorite', authenticate, getFavoriteRecipeByUser);
 operationsRouter.post('/favorite', authenticate, isValidIdByReqBody, addRecipeToFavorite);
