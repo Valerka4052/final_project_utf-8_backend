@@ -39,7 +39,7 @@ const register = async (req, res) => {
     id: _id,
   };
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-    expiresIn: "1m",
+    expiresIn: "2m",
   });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: "7d",
@@ -85,7 +85,7 @@ const refresh = async (req, res) => {
       id,
     };
     const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-      expiresIn: "1m",
+      expiresIn: "2m",
     });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
@@ -138,20 +138,20 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(403, "Email or password is wrong");
   }
   // if (!user.verify) {
   //   throw HttpError(404, "User not found");
   // }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(403, "Email or password is wrong");
   }
   const payload = {
     id: user._id,
   };
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-    expiresIn: "1m",
+    expiresIn: "2m",
   });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: "7d",
@@ -226,7 +226,7 @@ const googleAuth = async (req, res) => {
   const { name, avatarURL } = req.user;
 
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-    expiresIn: "24h",
+    expiresIn: "2m",
   });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: "7d",
