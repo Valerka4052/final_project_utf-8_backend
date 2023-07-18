@@ -124,12 +124,12 @@ const deleteRecipe = async (req, res) => {
 
 const getFavoriteRecipeByUser = async (req, res) => {
   const { page = 1, limit = 4 } = req.query;
-  const { _id } = req.user;
+  const { id } = req.user;
   const skip = (page - 1);
-  const recipes = (await Recipe.find({ favorite: { $elemMatch: { _id } } })).length;
+  const recipes = (await Recipe.find({ favorite: { $elemMatch: { id } } })).length;
   const totalPages = Math.ceil(recipes / limit);
-  const userRecipes = await Recipe.find({ favorite: { $elemMatch: { _id } } }).skip(skip).limit(limit);
-  if (!userRecipes) throw HttpError(404, "recipes not found");
+  const userRecipes = await Recipe.find({ favorite: { $elemMatch: { id } } }).skip(skip).limit(limit);
+  if (!userRecipes) throw HttpError(404, "not found");
   return res.status(200).json({ favorites: userRecipes, totalPages });
 };
 
@@ -141,7 +141,7 @@ const addRecipeToFavorite = async (req, res) => {
     { new: true }
   );
   if (!updatedReciepe) return HttpError(404, "recipes not found");
-  return res.status(200).json(updatedReciepe);
+  return res.status(200).json({ message: "recipe has scsessfully added to favorite" });
 };
 
 const deleteRecipeFromFavorite = async (req, res) => {
