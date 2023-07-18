@@ -39,7 +39,7 @@ const register = async (req, res) => {
     id: _id,
   };
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-    expiresIn: "2m",
+    expiresIn: "1m",
   });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: "7d",
@@ -85,11 +85,13 @@ const refresh = async (req, res) => {
       id,
     };
     const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-      expiresIn: "2m",
+      expiresIn: "1m",
     });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
       expiresIn: "7d",
     });
+
+    await User.findByIdAndUpdate(id, { accessToken, refreshToken });
 
     res.json({
       accessToken,
@@ -149,7 +151,7 @@ const login = async (req, res) => {
     id: user._id,
   };
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-    expiresIn: "2m",
+    expiresIn: "1m",
   });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: "7d",
