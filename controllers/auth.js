@@ -91,6 +91,8 @@ const refresh = async (req, res) => {
       expiresIn: "7d",
     });
 
+    await User.findByIdAndUpdate(id, { accessToken, refreshToken });
+
     res.json({
       accessToken,
       refreshToken,
@@ -136,14 +138,14 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(403, "Email or password is wrong");
   }
   // if (!user.verify) {
   //   throw HttpError(404, "User not found");
   // }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(401, "Email or password is wrong");
+    throw HttpError(403, "Email or password is wrong");
   }
   const payload = {
     id: user._id,
@@ -180,7 +182,7 @@ const logout = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { _id } = req.user;
-  const name = req.body.name || req.user.name;
+  const name = req.body.name;
   const bodyLength = Object.keys(req.body).length;
 
   if (!req.file) {
@@ -212,9 +214,7 @@ const updateUser = async (req, res) => {
       avatarURL: path,
       name,
     });
-    res
-      .status(200)
-      .json({ avatarURL: updatedUser.avatarURL, name: updatedUser.name });
+    res.status(200).json({ avatarURL: path, name: name });
   }
 };
 const googleAuth = async (req, res) => {
@@ -226,7 +226,7 @@ const googleAuth = async (req, res) => {
   const { name, avatarURL } = req.user;
 
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-    expiresIn: "5m",
+    expiresIn: "2m",
   });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: "7d",
