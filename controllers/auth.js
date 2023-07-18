@@ -180,7 +180,7 @@ const logout = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { _id } = req.user;
-  const name = req.body.name || req.user.name;
+  const name = req.body.name;
   const bodyLength = Object.keys(req.body).length;
 
   if (!req.file) {
@@ -212,9 +212,7 @@ const updateUser = async (req, res) => {
       avatarURL: path,
       name,
     });
-    res
-      .status(200)
-      .json({ avatarURL: updatedUser.avatarURL, name: updatedUser.name });
+    res.status(200).json({ avatarURL: path, name: name });
   }
 };
 const googleAuth = async (req, res) => {
