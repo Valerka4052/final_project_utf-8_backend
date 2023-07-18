@@ -167,7 +167,7 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-  const { email, name, shoppingList, avatarURL } = req.user;
+  const { email, name, avatarURL } = req.user;
 
   res.status(200).json({ email, name, avatarURL });
 };
