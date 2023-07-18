@@ -182,7 +182,7 @@ const addProductToSoppingList = async (req, res) => {
   const { ingredientId, uniqId, measure,recipeId } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $push: { shoppingList: { _id: ingredientId, measure, id: uniqId, recipeId } } },
+    { $push: { shoppingList: { _id: ingredientId, measure, uniqId, recipeId } } },
     { new: true }
   )
   if (!updatedUser) return HttpError(404, "not found");
