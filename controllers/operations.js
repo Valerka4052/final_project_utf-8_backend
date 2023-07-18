@@ -182,7 +182,7 @@ const addProductToSoppingList = async (req, res) => {
   const { ingredientId, uniqId, measure,recipeId } = req.body;
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { $push: { shoppingList: { _id: ingredientId, measure, uniqId, recipeId } } },
+    { $push: { shoppingList: { id: ingredientId, measure, uniqId, recipeId } } },
     { new: true }
   )
   if (!updatedUser) return HttpError(404, "not found");
@@ -202,7 +202,7 @@ const removeProductFromSoppingList = async (req, res) => {
 };
 const getShoppingList = async (req, res) => {
   const { _id } = req.user;
-  const user = await User.findById(_id).populate("shoppingList._id");
+  const user = await User.findById(_id).populate("shoppingList.id");
   if (!user) return HttpError(404, "not found");
   const list = user.shoppingList;
   res.status(200).json(list);
