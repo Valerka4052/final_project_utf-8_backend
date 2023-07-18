@@ -226,7 +226,7 @@ const googleAuth = async (req, res) => {
   const { name, avatarURL } = req.user;
 
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
-    expiresIn: "24h",
+    expiresIn: "5m",
   });
   const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, {
     expiresIn: "7d",
