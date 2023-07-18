@@ -76,13 +76,15 @@
           },
           "409": {
             "description": "Provided email already exists",
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "Email in use"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Provided email already exists"
+                    }
                   }
                 }
               }
@@ -90,13 +92,15 @@
           },
           "400": {
             "description": "Missing fields",
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": " missing required name field"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": " missing required name field"
+                    }
                   }
                 }
               }
@@ -147,13 +151,15 @@
           },
           "401": {
             "description": "Email or password is wrong",
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "Email or password is wrong"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Email or password is wrong"
+                    }
                   }
                 }
               }
@@ -161,13 +167,15 @@
           },
           "400": {
             "description": "Missing fields",
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": " missing required name field"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": " missing required name field"
+                    }
                   }
                 }
               }
@@ -220,13 +228,15 @@
           },
           "403": {
             "description": "Token invalid",
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "Token invalid"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Token invalid"
+                    }
                   }
                 }
               }
@@ -234,13 +244,15 @@
           },
           "400": {
             "description": "Missing fields",
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": " missing required name field"
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": " missing required name field"
+                    }
                   }
                 }
               }
