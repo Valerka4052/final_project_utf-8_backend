@@ -38,7 +38,7 @@ const userSchema = new Schema(
           _id: { type: String, ref: "Ingredient" },
           measure: String,
           id: String,
-          recipeId: String,
+          uniqId: String,
         },
       ],
 
