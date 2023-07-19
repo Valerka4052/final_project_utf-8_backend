@@ -19,12 +19,12 @@
       "name": "users",
       "description": "register, login, logout and update some information"
     },
-    { "name": "recipes", "description": "Add, delete nad get recipes" },
-    { "name": "ingredients", "description": "Add, delete nad get ingredients" },
-    { "name": "ownRecipes", "description": "Add, delete nad get recipes" },
-    { "name": "favorite", "description": "Add, delete nad get recipes" },
-    { "name": "popular-recipe", "description": "Add, delete nad get recipes" },
-    { "name": "shopping-list", "description": "Add, delete nad get recipes" },
+    { "name": "recipes", "description": "Add, delete and get recipes" },
+    { "name": "ingredients", "description": "Add, delete and get ingredients" },
+    { "name": "own recipes", "description": "Add, delete and get recipes" },
+    { "name": "favorite", "description": "Add, delete and get recipes" },
+    { "name": "popular-recipes", "description": "Add, delete and get recipes" },
+    { "name": "shopping-list", "description": "Add, delete and get recipes" },
     { "name": "user-info", "description": "User information" },
     { "name": "subscribe", "description": "Subscribe to newsletter" }
   ],
@@ -83,7 +83,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Provided email already exists"
+                      "example": "provided email already exists"
                     }
                   }
                 }
@@ -158,7 +158,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Email or password is wrong"
+                      "example": "email or password is wrong"
                     }
                   }
                 }
@@ -219,7 +219,8 @@
                       "type": "string"
                     },
                     "refreshToken": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0YjUzYzE2MjQwM2JkNWUyMDUzNzlkMiIsImlhdCI6MTY4OTU5ODk5OCwiZXhwIjoxNjkwMjAzNzk4fQ.7OaqT-VZr03LizCoBLDZk7DSosRr55AAArDaE-y2Q6n"
                     }
                   }
                 }
@@ -235,7 +236,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Token invalid"
+                      "example": "token invalid"
                     }
                   }
                 }
@@ -279,7 +280,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Not authorized"
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -314,7 +315,7 @@
                   "properties": {
                     "message": {
                       "type": "string",
-                      "example": "Not authorized"
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -384,7 +385,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -418,7 +420,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -432,7 +435,8 @@
                 "type": "object",
                 "properties": {
                   "message": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "not found"
                   }
                 }
               }
@@ -470,7 +474,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "recipe has scsessfully added to favorite"
                     }
                   }
                 }
@@ -485,7 +490,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -500,7 +506,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "6462a5gd4c3d0dsd28897f5h is not valid id"
                     }
                   }
                 }
@@ -515,7 +522,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -564,7 +572,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -579,7 +588,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "6462a5gd4c3d0dsd28897f5h is not valid id"
                     }
                   }
                 }
@@ -594,7 +604,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -606,7 +617,7 @@
     },
     "/ownRecipes": {
       "get": {
-        "tags": ["ownRecipes"],
+        "tags": ["own recipes"],
         "security": [{ "Bearer": [] }],
         "summary": "Own recipes",
         "responses": {
@@ -615,7 +626,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecipesResponse"
+                  "$ref": "#/components/schemas/OwnerRicepeShemasResponse"
                 }
               }
             }
@@ -628,7 +639,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -643,7 +655,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -653,7 +666,7 @@
         }
       },
       "post": {
-        "tags": ["ownRecipes"],
+        "tags": ["own recipes"],
         "security": [{ "Bearer": [] }],
         "summary": "Add  recipes",
         "requestBody": {
@@ -662,7 +675,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RicepeShemas"
+                "$ref": "#/components/schemas/OwnerRicepeShemasRequest"
               }
             }
           }
@@ -673,7 +686,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RicepeShemas"
+                  "$ref": "#/components/schemas/OwnerRicepeShemasResponse"
                 }
               }
             }
@@ -687,7 +700,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -697,7 +711,7 @@
         }
       },
       "patch": {
-        "tags": ["ownRecipes"],
+        "tags": ["own recipes"],
         "security": [{ "Bearer": [] }],
         "summary": "Delete  recipes",
         "requestBody": {
@@ -726,7 +740,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "recipe is deleted"
                     }
                   }
                 }
@@ -741,7 +756,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -756,7 +772,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "6462a5gd4c3d0dsd28897f5h is not valid id"
                     }
                   }
                 }
@@ -771,7 +788,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -812,7 +830,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "sucsess"
                     }
                   }
                 }
@@ -827,7 +846,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -862,7 +882,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -877,7 +898,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -891,7 +913,7 @@
       "get": {
         "tags": ["recipes"],
         "security": [{ "Bearer": [] }],
-        "summary": "recipes",
+        "summary": "Get recipes for main-page",
 
         "responses": {
           "200": {
@@ -912,7 +934,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -927,7 +950,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -937,11 +961,11 @@
         }
       }
     },
-    "recipes/category-list": {
+    "/recipes/category-list": {
       "get": {
         "tags": ["recipes"],
         "security": [{ "Bearer": [] }],
-        "summary": "recipes",
+        "summary": "Get recipes by category-list ",
 
         "responses": {
           "200": {
@@ -962,7 +986,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -977,7 +1002,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -991,7 +1017,7 @@
       "get": {
         "tags": ["recipes"],
         "security": [{ "Bearer": [] }],
-        "summary": "recipes",
+        "summary": "Get recipes by category ",
         "parameters": [
           {
             "name": "category",
@@ -1022,7 +1048,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -1037,7 +1064,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -1082,7 +1110,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -1097,7 +1126,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -1112,7 +1142,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "6462a5gd4c3d0dsd28897f5h is not valid id"
                     }
                   }
                 }
@@ -1126,7 +1157,7 @@
       "get": {
         "tags": ["ingredients"],
         "security": [{ "Bearer": [] }],
-        "summary": "recipes",
+        "summary": "ingredients list",
 
         "responses": {
           "200": {
@@ -1147,7 +1178,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not authorized"
                     }
                   }
                 }
@@ -1162,7 +1194,8 @@
                   "type": "object",
                   "properties": {
                     "message": {
-                      "type": "string"
+                      "type": "string",
+                      "example": "not found"
                     }
                   }
                 }
@@ -1184,17 +1217,25 @@
           "refreshToken": {
             "type": "string"
           },
-          "email": {
-            "type": "string",
-            "description": "User's email"
-          },
-          "name": {
-            "type": "string",
-            "description": "User's name"
-          },
-          "avatarURL": {
-            "type": "string",
-            "description": "User's temporary avatar"
+          "user": {
+            "type": "object",
+            "properties": {
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "User's email"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "Volodya"
+              },
+              "avatarURL": {
+                "type": "string",
+                "description": "User's temporary avatar",
+                "example": "V46http://www.gravatar.com/avatar/e929956a35ba8a052a0fd6dba44eb5f2?s=100&r=x&d=wavatar02323"
+              }
+            }
           }
         }
       },
@@ -1313,6 +1354,7 @@
               "item": { "type": "string" }
             }
           },
+
           "ingredients": {
             "type": "array",
             "items": {
@@ -1347,6 +1389,84 @@
           }
         }
       },
+      "OwnerRicepeShemasRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+
+          "instructions": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+
+          "time": {
+            "type": "string"
+          },
+
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "measure": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "OwnerRicepeShemasResponse": {
+        "type": "object",
+        "properties": {
+          "owner": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+
+          "instructions": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+
+          "time": {
+            "type": "string"
+          },
+
+          "ingredients": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "measure": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+
       "IngredientShemas": {
         "type": "object",
         "properties": {

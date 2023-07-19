@@ -68,21 +68,50 @@ const shoppingListSchema = Joi.object({
 });
 
 const registerSchema = Joi.object({
-  name: Joi.string(),
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
+  name: Joi.string().messages({
+    "string.base": "The name must be a string.",
+    "any.required": "The name field is required.",
+    "string.empty": "The name must not be empty",
+  }),
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
+  password: Joi.string().min(6).required().messages({
+    "string.base": "The password must be a string.",
+    "any.required": "The password field is required.",
+    "string.empty": "The password must not be empty",
+    "string.min": "The password must be not less 6 symbols.",
+  }),
 });
 
 const refreshSchema = Joi.object({
   refreshToken: Joi.string().required(),
 });
 const loginSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
-  password: Joi.string().min(6).required(),
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
+  password: Joi.string().min(6).required().messages({
+    "string.base": "The password must be a string.",
+    "any.required": "The password field is required.",
+    "string.empty": "The password must not be empty",
+    "string.min": "The password must be not less 6 symbols.",
+  }),
 });
 
 const emailSchema = Joi.object({
-  email: Joi.string().pattern(emailRegexp).required(),
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    "string.base": "The email must be a string.",
+    "any.required": "The email field is required.",
+    "string.empty": "The email must not be empty",
+    "string.pattern.base": "The email must be in format test@gmail.com.",
+  }),
 });
 
 const schemas = {
@@ -90,7 +119,7 @@ const schemas = {
   loginSchema,
   emailSchema,
   refreshSchema,
-  shoppingListSchema
+  shoppingListSchema,
 };
 
 const User = model("user", userSchema);

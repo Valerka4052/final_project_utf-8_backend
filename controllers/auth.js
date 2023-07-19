@@ -2,13 +2,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const path = require("path");
 const gravatar = require("gravatar");
-const fs = require("fs/promises");
+
 const { nanoid } = require("nanoid");
 const { User } = require("../models/user");
 const { funcWrapper, HttpError, sendEmail } = require("../helpers");
-require('dotenv').config();
+require("dotenv").config();
 const { SECRET_KEY, ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
-
 
 const register = async (req, res) => {
   const { email, password } = req.body;
@@ -76,7 +75,7 @@ const refresh = async (req, res) => {
     const { id } = jwt.verify(token, REFRESH_SECRET_KEY);
     const isExist = await User.findOne({ refreshToken: token });
     if (!isExist) {
-      throw HttpError(403, "Token invalid");
+      throw HttpError(403, "token invalid");
     }
     const payload = {
       id,
@@ -135,14 +134,14 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(403, "Email or password is wrong");
+    throw HttpError(403, "email or password is wrong");
   }
   // if (!user.verify) {
   //   throw HttpError(404, "User not found");
   // }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(403, "Email or password is wrong");
+    throw HttpError(403, "email or password is wrong");
   }
   const payload = {
     id: user._id,
@@ -186,25 +185,11 @@ const updateUser = async (req, res) => {
     await User.findByIdAndUpdate(_id, { name });
     res.status(200).json({ name });
   } else if (bodyLength === 0) {
-    // const { path: tempUpload, originalname } = req.file;
-    // const filename = `${_id}_${originalname}`;
-    // const resultUpload = path.join(avatarsDir, filename);
-    // await fs.rename(tempUpload, resultUpload);
-    // const avatarURL = path.join("avatars", filename);
-    //     await User.findByIdAndUpdate(_id, { avatarURL });
-    // res.json({ avatarURL });
     const { path } = req.file;
 
     const updatedUser = await User.findByIdAndUpdate(_id, { avatarURL: path });
     res.status(200).json({ avatarURL: path });
   } else {
-    // const { path: tempUpload, originalname } = req.file;
-    // const filename = `${_id}_${originalname}`;
-    // const resultUpload = path.join(avatarsDir, filename);
-    // await fs.rename(tempUpload, resultUpload);
-    // const avatarURL = path.join("avatars", filename);
-    // await User.findByIdAndUpdate(_id, { avatarURL, name });
-    // res.json({ avatarURL, name });
     const { path } = req.file;
 
     const updatedUser = await User.findByIdAndUpdate(_id, {
