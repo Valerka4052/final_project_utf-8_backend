@@ -178,7 +178,9 @@ const logout = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { _id } = req.user;
-  const name = req.body.name;
+
+  const name = req.body.name || req.user.name;
+
   const bodyLength = Object.keys(req.body).length;
 
   if (!req.file) {
