@@ -25,7 +25,7 @@
     { "name": "favorite", "description": "Add, delete and get recipes" },
     { "name": "popular-recipes", "description": "Add, delete and get recipes" },
     { "name": "shopping-list", "description": "Add, delete and get recipes" },
-    { "name": "user-info", "description": "User information" },
+
     { "name": "subscribe", "description": "Subscribe to newsletter" }
   ],
   "paths": {
@@ -340,12 +340,11 @@
                 "properties": {
                   "name": {
                     "type": "string",
-
                     "description": "User's name"
                   },
-                  "avatarURL": {
+                  "avatar": {
                     "type": "string",
-
+                    "format": "binary",
                     "description": "User's  avatar",
                     "example": "http://www.gravatar.com/avatar/26ff068050ca831bbff5bcae0cb45723?s=100&r=x&d=wavatar"
                   }
@@ -407,7 +406,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecipesResponse"
+                  "type": "object",
+                  "properties": {
+                    "favorite": {
+                      "$ref": "#/components/schemas/RecipesResponse"
+                    },
+                    "totalPages": {
+                      "type": "integer"
+                    }
+                  }
                 }
               }
             }
@@ -559,7 +566,13 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AuthResponse"
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "recipe has scsessfully deled from favorite"
+                    }
+                  }
                 }
               }
             }
@@ -626,7 +639,18 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OwnerRicepeShemasResponse"
+                  "type": "object",
+                  "properties": {
+                    "totalPages": {
+                      "type": "integer"
+                    },
+                    "recipes": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/OwnerRicepeShemasResponse"
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -673,7 +697,7 @@
           "description": "New  recipes",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "$ref": "#/components/schemas/OwnerRicepeShemasRequest"
               }
@@ -858,8 +882,8 @@
       }
     },
     "/popular-recipe": {
-      "post": {
-        "tags": ["popular-recipe"],
+      "get": {
+        "tags": ["popular-recipes"],
         "security": [{ "Bearer": [] }],
         "summary": "popular-recipe",
 
@@ -921,7 +945,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecipesResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecipeItemForMainPage"
+                  }
                 }
               }
             }
@@ -973,7 +1000,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecipesResponse"
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -1035,7 +1065,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RecipesResponse"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/RecipeItemForMainPage"
+                  }
                 }
               }
             }
@@ -1204,6 +1237,185 @@
           }
         }
       }
+    },
+    "/shopping-list": {
+      "get": {
+        "tags": ["shopping-list"],
+        "security": [{ "Bearer": [] }],
+        "summary": "shopping-list",
+        "responses": {
+          "200": {
+            "description": " Successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListShemasResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "recipes not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["shopping-list"],
+        "security": [{ "Bearer": [] }],
+        "summary": "Add  recipes",
+        "requestBody": {
+          "description": " recipes",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShoppingListShemasRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Added  recipes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListShemasResponse"
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "recipes not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["shopping-list"],
+        "security": [{ "Bearer": [] }],
+        "summary": "Delete  recipes",
+        "requestBody": {
+          "description": "recipe to delete",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "uniqId": {
+                    "type": "string",
+                    "example": "6462a5gd4c3d0dsd28897f5h"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delete  recipes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShoppingListShemasResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": " not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+
+          "401": {
+            "description": "Not authorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "not authorized"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1282,14 +1494,15 @@
             },
             "ingredients": {
               "type": "array",
+              "description": "ingredients",
               "items": {
                 "type": "object",
                 "properties": {
-                  "id": {
+                  "_id": {
                     "type": "string"
                   },
-                  "measure": {
-                    "type": "string"
+                  "id": {
+                    "$ref": "#/components/schemas/IngredientShemas"
                   }
                 }
               }
@@ -1357,14 +1570,15 @@
 
           "ingredients": {
             "type": "array",
+            "description": "ingredients",
             "items": {
               "type": "object",
               "properties": {
-                "id": {
+                "_id": {
                   "type": "string"
                 },
-                "measure": {
-                  "type": "string"
+                "id": {
+                  "$ref": "#/components/schemas/IngredientShemas"
                 }
               }
             }
@@ -1423,6 +1637,11 @@
                 }
               }
             }
+          },
+          "preview": {
+            "type": "string",
+            "description": "preview img",
+            "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560630/udf2g6mv8gm0eqvqylha.jpg"
           }
         }
       },
@@ -1463,6 +1682,11 @@
                 }
               }
             }
+          },
+          "preview": {
+            "type": "string",
+            "description": "preview img",
+            "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560630/udf2g6mv8gm0eqvqylha.jpg"
           }
         }
       },
@@ -1481,6 +1705,143 @@
           },
           "img": {
             "type": "string"
+          }
+        }
+      },
+      "RecipeItemForMainPage": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "_id",
+            "example": "6462a6cd4c3d0ddd28897f8e"
+          },
+          "title": {
+            "type": "string",
+            "description": "title",
+            "example": "Blackberry Fool"
+          },
+          "category": {
+            "type": "string",
+            "description": "category",
+            "example": "Dessert"
+          },
+          "area": {
+            "type": "string",
+            "description": "area",
+            "example": "British"
+          },
+          "instructions": {
+            "type": "string",
+            "description": "instructions",
+            "example": "For the biscuits, preheat the oven to 200C/180C (fan)/Gas 6 and line two..."
+          },
+          "description": {
+            "type": "string",
+            "description": "description",
+            "example": "A light and creamy dessert made with whipped..."
+          },
+          "thumb": {
+            "type": "string",
+            "description": "img",
+            "example": "https://www.themealdb.com/images/media/meals/rpvptu1511641092.jpg"
+          },
+          "preview": {
+            "type": "string",
+            "description": "preview img",
+            "example": "https://res.cloudinary.com/ddbvbv5sp/image/upload/v1678560630/udf2g6mv8gm0eqvqylha.jpg"
+          },
+          "time": {
+            "type": "string",
+            "description": "time prepere",
+            "example": "60"
+          },
+          "youtube": {
+            "type": "string",
+            "description": "link youtube",
+            "example": "https://www.youtube.com/watch?v=kniRGjDLFrQ"
+          },
+          "tags": {
+            "type": "array",
+            "description": "tags",
+            "items": {
+              "type": "string",
+              "example": ["Desert", "Summer", "Fruity", "Dairy"]
+            }
+          },
+          "ingredients": {
+            "type": "array",
+            "description": "ingredients",
+            "items": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string"
+                },
+                "id": {
+                  "$ref": "#/components/schemas/IngredientShemas"
+                }
+              }
+            }
+          },
+          "favorite": {
+            "type": "array",
+            "description": "usersWhoLiked",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "64aa5ce5137b529517b734c6"
+                },
+                "_id": {
+                  "type": "string",
+                  "example": "64aa5ce5137b529517b734c6"
+                }
+              }
+            }
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "created time",
+            "example": "2023-07-09T12:51:27.615Z"
+          }
+        }
+      },
+      "ShoppingListShemasRequest": {
+        "type": "object",
+        "properties": {
+          "ingredientId": {
+            "type": "string"
+          },
+          "measure": {
+            "type": "string"
+          },
+          "recipeId": {
+            "type": "string"
+          },
+          "uniqId": {
+            "type": "string"
+          }
+        }
+      },
+      "ShoppingListShemasResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "measure": {
+              "type": "string"
+            },
+            "recipeId": {
+              "type": "string"
+            },
+            "uniqId": {
+              "type": "string"
+            }
           }
         }
       }
