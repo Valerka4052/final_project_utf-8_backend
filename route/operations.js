@@ -37,15 +37,16 @@ operationsRouter.get('/search', authenticate, searchRecipes);
 operationsRouter.get('/ingredients/list', authenticate, getAllIngredients);
 operationsRouter.get('/ingredients', authenticate,  getRecipesByIngredient);
 operationsRouter.get('/ownRecipes', authenticate, getRecipeByUser);
-operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"),validated(addRecipeShema), addRecipe);
+operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"), addRecipe);
 operationsRouter.patch('/ownRecipes', authenticate, isValidIdByReqBody, deleteRecipe);
 operationsRouter.get('/favorite', authenticate, getFavoriteRecipeByUser);
 operationsRouter.post('/favorite', authenticate, isValidIdByReqBody, addRecipeToFavorite);
 operationsRouter.patch('/favorite', authenticate, isValidIdByReqBody, deleteRecipeFromFavorite);
 operationsRouter.get('/popular-recipe', authenticate, getPouplarRecipes);
-operationsRouter.post('/shopping-list', authenticate,validated(schemas.shoppingListSchema),  addProductToSoppingList);
+operationsRouter.post('/shopping-list', authenticate, addProductToSoppingList);
 operationsRouter.patch('/shopping-list', authenticate,  removeProductFromSoppingList);
 operationsRouter.get('/shopping-list', authenticate, getShoppingList);
 operationsRouter.get('/user-info', authenticate, getUserInfo);
-
+// validated(schemas.shoppingListSchema), 
+// validated(addRecipeShema),
 module.exports = operationsRouter
