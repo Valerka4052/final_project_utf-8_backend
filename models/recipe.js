@@ -16,8 +16,8 @@ const addRecipeShema = Joi.object({
 });
 
 const IngrSchema = new Schema({
-  id: { type: String, ref: "Ingredient" },
-  measure: { type: String },
+    id: { type: String, ref: "Ingredient" },
+    measure: { type: String },
 });
 
 const recipeSchema = new Schema({

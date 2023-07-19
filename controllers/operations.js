@@ -228,24 +228,6 @@ const getShoppingList = async (req, res) => {
   res.status(200).json(list);
 };
 
-// const getUserInfo = async (req, res) => {
-//   const { _id } = req.user;
-//   const user = await User.findById(_id).populate("shoppingList");
-//   if (!user) return HttpError(404, "not found");
-//   const userRecipes = await Recipe.find({
-//     favorite: { $elemMatch: { _id } },
-//   }).populate("favorite");
-//   if (!userRecipes) return HttpError(404, "not found");
-//   const date1 = new Date(user.createdAt);
-//   const date2 = new Date();
-//   const difference = date2 - date1;
-//   const daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
-//   res.status(200).json({
-//     daysInApp: daysDifference,
-//     favoriteRecipes: userRecipes,
-//     shoppingList: user.shoppingList,
-//   });
-// };
 
 module.exports = {
   subscribe: funcWrapper(subscribe),
@@ -266,5 +248,4 @@ module.exports = {
   getShoppingList: funcWrapper(getShoppingList),
   addProductToSoppingList: funcWrapper(addProductToSoppingList),
   removeProductFromSoppingList: funcWrapper(removeProductFromSoppingList),
-  // getUserInfo: funcWrapper(getUserInfo),
 };

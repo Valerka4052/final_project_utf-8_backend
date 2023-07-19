@@ -23,7 +23,6 @@ const {
     addProductToSoppingList,
     removeProductFromSoppingList,
     subscribe,
-    getUserInfo
 } = require('../controllers/operations');
 const upload = require("../middlewares/upload");
 const { addRecipeShema } = require('../models/recipe');
@@ -46,7 +45,5 @@ operationsRouter.get('/popular-recipe', authenticate, getPouplarRecipes);
 operationsRouter.post('/shopping-list', authenticate, addProductToSoppingList);
 operationsRouter.patch('/shopping-list', authenticate,  removeProductFromSoppingList);
 operationsRouter.get('/shopping-list', authenticate, getShoppingList);
-operationsRouter.get('/user-info', authenticate, getUserInfo);
-// validated(schemas.shoppingListSchema), 
-// validated(addRecipeShema),
+
 module.exports = operationsRouter
