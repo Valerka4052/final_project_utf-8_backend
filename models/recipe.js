@@ -5,7 +5,7 @@ const Joi = require('joi');
 const addRecipeShema = Joi.object({
     title: Joi.string().required(),
     category: Joi.string().required(),
-    area: Joi.string().required(),
+
     instructions: Joi.string().required(),
     description: Joi.string().required(),
     time: Joi.string().required(),
@@ -14,9 +14,9 @@ const addRecipeShema = Joi.object({
     'any.required': 'missing required {#label} field',
     'object.missing': 'Fields {#context.missing} are missing'
 });
-
+//   id: { type: String, ref: "Ingredient" },
 const IngrSchema = new Schema({
-  id: { type: String, ref: "Ingredient" },
+  id:  String, ref: "Ingredient" ,
   measure: { type: String },
 });
 

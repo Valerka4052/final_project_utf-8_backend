@@ -120,11 +120,9 @@ const getRecipeByUser = async (req, res) => {
 const addRecipe = async (req, res) => {
   const { _id } = req.user;
   const { path } = req.file;
-  console.log("req.body", req.body);
-
+  // console.log("req.body", req.body);
   const recipe = await Recipe.create({ ...req.body, preview: path, owner: _id });
   if (!recipe) return HttpError(404, 'not found');
-
   res.status(200).json(recipe);
 };
 
@@ -221,6 +219,7 @@ const removeProductFromSoppingList = async (req, res) => {
   if (!updatedUser) return HttpError(404, "not found");
   return res.status(200).json(updatedUser.shoppingList);
 };
+
 const getShoppingList = async (req, res) => {
   const { _id } = req.user;
   const user = await User.findById(_id).populate("shoppingList.id");
@@ -228,24 +227,25 @@ const getShoppingList = async (req, res) => {
   const list = user.shoppingList;
   res.status(200).json(list);
 };
-const getUserInfo = async (req, res) => {
-  const { _id } = req.user;
-  const user = await User.findById(_id).populate("shoppingList");
-  if (!user) return HttpError(404, "not found");
-  const userRecipes = await Recipe.find({
-    favorite: { $elemMatch: { _id } },
-  }).populate("favorite");
-  if (!userRecipes) return HttpError(404, "not found");
-  const date1 = new Date(user.createdAt);
-  const date2 = new Date();
-  const difference = date2 - date1;
-  const daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
-  res.status(200).json({
-    daysInApp: daysDifference,
-    favoriteRecipes: userRecipes,
-    shoppingList: user.shoppingList,
-  });
-};
+
+// const getUserInfo = async (req, res) => {
+//   const { _id } = req.user;
+//   const user = await User.findById(_id).populate("shoppingList");
+//   if (!user) return HttpError(404, "not found");
+//   const userRecipes = await Recipe.find({
+//     favorite: { $elemMatch: { _id } },
+//   }).populate("favorite");
+//   if (!userRecipes) return HttpError(404, "not found");
+//   const date1 = new Date(user.createdAt);
+//   const date2 = new Date();
+//   const difference = date2 - date1;
+//   const daysDifference = Math.floor(difference / (1000 * 60 * 60 * 24));
+//   res.status(200).json({
+//     daysInApp: daysDifference,
+//     favoriteRecipes: userRecipes,
+//     shoppingList: user.shoppingList,
+//   });
+// };
 
 module.exports = {
   subscribe: funcWrapper(subscribe),
@@ -266,5 +266,5 @@ module.exports = {
   getShoppingList: funcWrapper(getShoppingList),
   addProductToSoppingList: funcWrapper(addProductToSoppingList),
   removeProductFromSoppingList: funcWrapper(removeProductFromSoppingList),
-  getUserInfo: funcWrapper(getUserInfo),
+  // getUserInfo: funcWrapper(getUserInfo),
 };
