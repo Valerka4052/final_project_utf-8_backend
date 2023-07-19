@@ -3,6 +3,7 @@ const operationsRouter = express.Router();
 const {isValid,isValidIdByReqBody} = require('../middlewares/isValidId');
 const authenticate = require('../middlewares/authenticate');
 const { validated } = require('../middlewares/validateBody');
+const { schemas } = require('../models/user');
 const {
     getListsByCategories,
     getAllCategories,
@@ -32,10 +33,8 @@ operationsRouter.get('/recipes/main-page', authenticate, getListsByCategories);
 operationsRouter.get('/recipes/category-list', authenticate, getAllCategories);
 operationsRouter.get('/recipes/category/:category', authenticate, getListsByCategoriesPage);
 operationsRouter.get('/recipes/:id', isValid, authenticate, getRecipeById);
-// operationsRouter.post('/search', authenticate, searchRecipes);
 operationsRouter.get('/search', authenticate, searchRecipes);
 operationsRouter.get('/ingredients/list', authenticate, getAllIngredients);
-// operationsRouter.post('/ingredients', authenticate, getRecipesByIngredient);
 operationsRouter.get('/ingredients', authenticate,  getRecipesByIngredient);
 operationsRouter.get('/ownRecipes', authenticate, getRecipeByUser);
 operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"),validated(addRecipeShema), addRecipe);
@@ -44,7 +43,7 @@ operationsRouter.get('/favorite', authenticate, getFavoriteRecipeByUser);
 operationsRouter.post('/favorite', authenticate, isValidIdByReqBody, addRecipeToFavorite);
 operationsRouter.patch('/favorite', authenticate, isValidIdByReqBody, deleteRecipeFromFavorite);
 operationsRouter.get('/popular-recipe', authenticate, getPouplarRecipes);
-operationsRouter.post('/shopping-list', authenticate,  addProductToSoppingList);
+operationsRouter.post('/shopping-list', authenticate,validated(schemas.shoppingListSchema),  addProductToSoppingList);
 operationsRouter.patch('/shopping-list', authenticate,  removeProductFromSoppingList);
 operationsRouter.get('/shopping-list', authenticate, getShoppingList);
 operationsRouter.get('/user-info', authenticate, getUserInfo);

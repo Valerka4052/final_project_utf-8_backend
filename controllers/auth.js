@@ -6,19 +6,16 @@ const fs = require("fs/promises");
 const { nanoid } = require("nanoid");
 const { User } = require("../models/user");
 const { funcWrapper, HttpError, sendEmail } = require("../helpers");
+require('dotenv').config();
+const { SECRET_KEY, ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
 
-SECRET_KEY = '{nYf}?:U,PI/^4>Pb"Qw`fa`oS2J1D';
-ACCESS_SECRET_KEY = "N_PegFHRrarax*P";
-REFRESH_SECRET_KEY = "f{?A>Xrt2<j#7$u";
-
-const avatarsDir = path.join(__dirname, "../public/avatars");
 
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
   if (user) {
-    throw HttpError(409, "Email in use");
+    throw HttpError(409, "email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);

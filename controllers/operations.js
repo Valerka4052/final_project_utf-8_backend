@@ -23,9 +23,6 @@ const subscribe = async (req, res) => {
 };
 
 const getListsByCategories = async (req, res) => {
-  // const categories = await Category.find();
-  // if (!categories) return HttpError(404, "categories not found");
-  // const categoryNames = categories.map((category) => category.name).sort();
   const categories = ['Breakfast', 'Miscellaneous', 'Chicken', 'Dessert'];
   const recipes = await Promise.all(
     categories.map(async (category) => {
@@ -62,7 +59,6 @@ const getRecipeById = async (req, res) => {
 };
 
 const searchRecipes = async (req, res) => {
-  // const { search } = req.body;
   const { page = 1, search, limit = 8 } = req.query;
   const { _id } = req.user;
   const skip = (page - 1);
@@ -81,7 +77,6 @@ const getAllIngredients = async (req, res) => {
 };
 
 const getRecipesByIngredient = async (req, res) => {
-  // const { search } = req.body;
   const { page = 1, search, limit = 8 } = req.query;
   const { _id } = req.user;
   const skip = (page - 1);

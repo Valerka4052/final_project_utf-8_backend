@@ -1,6 +1,5 @@
-GOOGLE_CLIENT_ID =
-  "112833128024-emj448kcbhnbi8fcc28un9l3cl9mhmf5.apps.googleusercontent.com";
-GOOGLE_CLIENT_SECRET = "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";
+require('dotenv').config();
+const { GOOGLE_CLIENT_SECRET, GOOGLE_CLIENT_ID,BASE_URL } = process.env;
 const passport = require("passport");
 const { Strategy } = require("passport-google-oauth2");
 const { User } = require("../models/user");
@@ -11,7 +10,7 @@ const gravatar = require("gravatar");
 const googleParams = {
   clientID: GOOGLE_CLIENT_ID,
   clientSecret: GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:3001/users/google/callback",
+  callbackURL: `${BASE_URL}/users/google/callback`,
   passReqToCallback: true,
 };
 

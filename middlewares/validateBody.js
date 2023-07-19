@@ -48,6 +48,6 @@ const validateUsersPatch = (schema) => {
 
 module.exports = {
   validateBodyPost,
-validated,
+  validated,
   validateUsersPatch,
 };

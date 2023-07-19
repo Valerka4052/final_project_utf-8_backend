@@ -57,11 +57,9 @@ const recipeSchema = new Schema({
     },
     thumb: {
         type: String,
-        // required: true,
-    },
+       },
     preview: {
         type: String,
-        // required: true,
     },
     time: {
         type: String,

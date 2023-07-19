@@ -37,7 +37,6 @@
     "passport": "^0.6.0",
     "passport-google-oauth2": "^0.2.0",
     "path": "^0.12.7",
-    "shortid": "^2.2.16",
     "swagger-ui-express": "^5.0.0"
   },
   "devDependencies": {
