@@ -120,8 +120,8 @@ const getRecipeByUser = async (req, res) => {
 const addRecipe = async (req, res) => {
   const { _id } = req.user;
   const { path } = req.file;
-  // console.log("req.body", req.body);
-  const recipe = await Recipe.create({ ...req.body, preview: path, owner: _id });
+  const ingredients = JSON.parse(req.body.ingredients);
+  const recipe = await Recipe.create({ ...req.body, preview: path, ingredients, owner: _id });
   if (!recipe) return HttpError(404, 'not found');
   res.status(200).json(recipe);
 };
