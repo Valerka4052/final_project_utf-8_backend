@@ -9,16 +9,7 @@ const validateBodyPost = (schema) => {
       throw HttpError(400, "missing fields");
     }
     if (error) {
-      const errorMesagge =
-        error.message
-          .split("is required")
-          .join("")
-          .split('"')
-          .join("")
-          .split(",")
-          .toString() || "";
-
-      next(HttpError(400, ` missing required ${errorMesagge} field`));
+      next(HttpError(400, `${error.message}`));
     }
     next();
   };
@@ -26,12 +17,12 @@ const validateBodyPost = (schema) => {
 };
 
 const validated = (shema) => {
-    const func = (req, res, next) => {
-        const { error } = shema.validate(req.body);
-        if (error) next(HttpError(400, error.message));
-        next();
-    };
-    return func;
+  const func = (req, res, next) => {
+    const { error } = shema.validate(req.body);
+    if (error) next(HttpError(400, error.message));
+    next();
+  };
+  return func;
 };
 
 const validateUsersPatch = (schema) => {
