@@ -61,7 +61,7 @@ const userSchema = new Schema(
 userSchema.post("save", handleMongooseError);
 
 const shoppingListSchema = Joi.object({
-  id: Joi.string().required(),
+  id: Joi.object().required(),
   measure: Joi.string().required(),
   recipeId: Joi.string().required(),
   uniqId: Joi.string().required(),
