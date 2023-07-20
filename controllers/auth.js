@@ -216,8 +216,9 @@ const googleAuth = async (req, res) => {
     expiresIn: "7d",
   });
   await User.findByIdAndUpdate(id, { accessToken, refreshToken });
+
   res.redirect(
-    `https://villiav.github.io/final_project_utf-8_front/main?accessToken=${accessToken}&refreshToken=${refreshToken}&avatarURL=${avatarURL}&name=${name}`
+    `https://villiav.github.io/final_project_utf-8_front/?accessToken=${accessToken}&refreshToken=${refreshToken}&avatarURL=${avatarURL}&name=${name}`
   );
 
   console.log(req.user);
