@@ -218,7 +218,7 @@ const googleAuth = async (req, res) => {
   await User.findByIdAndUpdate(id, { accessToken, refreshToken });
   res.redirect(
     `https://villiav.github.io/final_project_utf-8_front/main?accessToken=${accessToken}&refreshToken=${refreshToken}&avatarURL=${avatarURL}&name=${name}`
-  ); // перекинуть на фронт , на гласную страницу и в пареметрах передать токены
+  );
 
   console.log(req.user);
 };
