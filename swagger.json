@@ -463,7 +463,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "resId": {
+                  "id": {
                     "type": "string",
                     "example": "6462a5gd4c3d0dsd28897f5h"
                   }
@@ -551,7 +551,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "resId": {
+                  "id": {
                     "type": "string",
                     "example": "6462a5gd4c3d0dsd28897f5h"
                   }
