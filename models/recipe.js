@@ -9,7 +9,7 @@ const addRecipeShema = Joi.object({
     instructions: Joi.string().required(),
     description: Joi.string().required(),
     time: Joi.string().required(),
-    ingredients: Joi.array().required(),
+    ingredients: Joi.string().required(),
 }).messages({
     'any.required': 'missing required {#label} field',
     'object.missing': 'Fields {#context.missing} are missing'

@@ -36,7 +36,7 @@ operationsRouter.get('/search', authenticate, searchRecipes);
 operationsRouter.get('/ingredients/list', authenticate, getAllIngredients);
 operationsRouter.get('/ingredients', authenticate,  getRecipesByIngredient);
 operationsRouter.get('/ownRecipes', authenticate, getRecipeByUser);
-operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"), addRecipe);
+operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"),validated(addRecipeShema), addRecipe);
 operationsRouter.patch('/ownRecipes', authenticate, isValidIdByReqBody, deleteRecipe);
 operationsRouter.get('/favorite', authenticate, getFavoriteRecipeByUser);
 operationsRouter.post('/favorite', authenticate, isValidIdByReqBody, addRecipeToFavorite);

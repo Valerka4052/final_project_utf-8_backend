@@ -158,7 +158,7 @@ const addRecipeToFavorite = async (req, res) => {
   if (!updatedReciepe) return HttpError(404, "recipes not found");
   return res
     .status(200)
-    .json({ message: "recipe has scsessfully added to favorite" });
+    .json({ message: "recipe has sucsessfully added to favorite" });
 };
 
 const deleteRecipeFromFavorite = async (req, res) => {
@@ -170,7 +170,7 @@ const deleteRecipeFromFavorite = async (req, res) => {
     { new: true }
   );
   if (!deletedFromFavorite) return HttpError(404, "recipes not found");
-  res.status(200).json(deletedFromFavorite);
+  res.status(200).json({ message: "recipe has sucsessfully deleted from favorite" });
 };
 
 const getPouplarRecipes = async (req, res) => {
