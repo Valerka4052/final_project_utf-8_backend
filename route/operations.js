@@ -39,10 +39,10 @@ operationsRouter.get('/ownRecipes', authenticate, getRecipeByUser);
 operationsRouter.post('/ownRecipes', authenticate,upload.single("documents"),validated(addRecipeShema), addRecipe);
 operationsRouter.patch('/ownRecipes', authenticate, isValidIdByReqBody, deleteRecipe);
 operationsRouter.get('/favorite', authenticate, getFavoriteRecipeByUser);
-operationsRouter.post('/favorite', authenticate, isValidIdByReqBody,validated(schemas.shoppingListSchema), addRecipeToFavorite);
+operationsRouter.post('/favorite', authenticate, isValidIdByReqBody, addRecipeToFavorite);
 operationsRouter.patch('/favorite', authenticate, isValidIdByReqBody, deleteRecipeFromFavorite);
 operationsRouter.get('/popular-recipe', authenticate, getPouplarRecipes);
-operationsRouter.post('/shopping-list', authenticate, addProductToSoppingList);
+operationsRouter.post('/shopping-list', authenticate,validated(schemas.shoppingListSchema), addProductToSoppingList);
 operationsRouter.patch('/shopping-list', authenticate,  removeProductFromSoppingList);
 operationsRouter.get('/shopping-list', authenticate, getShoppingList);
 
