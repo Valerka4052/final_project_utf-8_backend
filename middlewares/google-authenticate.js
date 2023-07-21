@@ -5,7 +5,6 @@ const { Strategy } = require("passport-google-oauth2");
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const { nanoid } = require("nanoid");
-const gravatar = require("gravatar");
 
 const googleParams = {
   clientID: GOOGLE_CLIENT_ID,
@@ -30,7 +29,7 @@ const googleCallback = async (
 
     const password = await bcrypt.hash(nanoid(), 10);
     const avatarURL = picture;
-    const verificationCode = null;
+    const verificationCode = "null";
     const verify = true;
 
     const newUser = await User.create({
