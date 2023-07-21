@@ -90,6 +90,22 @@
               }
             }
           },
+          "408": {
+            "description": "Please check your email inbox",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": " Please check your email inbox"
+                    }
+                  }
+                }
+              }
+            }
+          },
           "400": {
             "description": "Missing fields",
             "content": {
@@ -100,6 +116,153 @@
                     "message": {
                       "type": "string",
                       "example": " missing required name field"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/verify": {
+      "post": {
+        "tags": ["users"],
+        "summary": "User resend verify email",
+        "requestBody": {
+          "description": "User's email",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "User's email"
+                  }
+                },
+                "required": ["email"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Verification email sent"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Missing fields",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": " missing required name field"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "verification has already been passed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": " verification has already been passed"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": " user not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/verify/{verificationCode}": {
+      "post": {
+        "tags": ["users"],
+        "summary": "verify user email",
+        "parameters": [
+          {
+            "name": "verificationCode",
+            "in": "path",
+            "description": "verificationCode user",
+            "required": true,
+            "type": "string",
+            "style": "simple"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "verification successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "accessToken": {
+                      "type": "string"
+                    },
+                    "refreshToken": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "verification successful"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "user not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": " user not found"
                     }
                   }
                 }
