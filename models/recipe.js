@@ -68,7 +68,11 @@ const recipeSchema = new Schema({
         type: String,
        },
     tags:  [String],
-    ingredients: [IngrSchema],
+    ingredients: {
+      _id: false,
+      type: [IngrSchema],
+      required: true,
+    },
     owner: {
         type: Schema.Types.ObjectId,
         ref: 'user',
