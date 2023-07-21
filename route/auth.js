@@ -29,7 +29,7 @@ authRouter.post(
   ctrl.register
 );
 
-// authRouter.get("/verify/:verificationCode", ctrl.verifyEmail);
+authRouter.get("/verify/:verificationCode", ctrl.verifyEmail);
 
 authRouter.post(
   "/verify",
