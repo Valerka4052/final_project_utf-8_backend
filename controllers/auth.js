@@ -5,7 +5,12 @@ const gravatar = require("gravatar");
 
 const { nanoid } = require("nanoid");
 const { User } = require("../models/user");
-const { funcWrapper, HttpError, sendEmail } = require("../helpers");
+const {
+  funcWrapper,
+  HttpError,
+  sendEmail,
+  emailTextRegister,
+} = require("../helpers");
 require("dotenv").config();
 const { SECRET_KEY, ACCESS_SECRET_KEY, REFRESH_SECRET_KEY, BASE_URL } =
   process.env;
@@ -54,18 +59,11 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verified email",
-    html: ` <a
-        target="_blank"
-        href="https://villiav.github.io/final_project_utf-8_front/?verificationCode=${verificationCode}"
-      >
-        Click verify email
-      </a>`,
+    html: emailTextRegister(verificationCode),
   };
   await sendEmail(verifyEmail);
 
   res.status(201).json({
-    // accessToken,
-    // refreshToken,
     user: {
       email: newUser.email,
       name: newUser.name,
@@ -127,7 +125,7 @@ const resendVerifyEmail = async (req, res) => {
   const { email } = req.body;
   const user = await User.findOne({ email });
   const { verificationCode } = user;
-  console.log(verificationCode);
+
   if (!user) {
     throw HttpError(404, "user not found");
   }
@@ -138,7 +136,7 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: " Resend verify email",
-    html: `<a target='_blank' href="https://villiav.github.io/final_project_utf-8_front/?verificationCode=${verificationCode}">Click verify email</a>`,
+    html: emailTextRegister(verificationCode),
   };
   await sendEmail(verifyEmail);
   res.status(200).json({

@@ -2,7 +2,12 @@ const { Recipe } = require("../models/recipe");
 const { Category } = require("../models/categories");
 const { Ingredient } = require("../models/ingredient");
 const { User } = require("../models/user");
-const { funcWrapper, HttpError, sendEmail } = require("../helpers");
+const {
+  funcWrapper,
+  HttpError,
+  sendEmail,
+  emailTextSubscription,
+} = require("../helpers");
 
 const subscribe = async (req, res) => {
   const { _id } = req.user;
@@ -13,11 +18,7 @@ const subscribe = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Subscribe",
-    html: ` <h1
-        target="_blank"
-      >
-        You subscribed to Soyummy !
-      </h1>`,
+    html: emailTextSubscription(),
   };
   await sendEmail(verifyEmail);
   res.status(200).json({ message: "sucsess" });
@@ -121,8 +122,13 @@ const addRecipe = async (req, res) => {
   const { _id } = req.user;
   const { path } = req.file;
   const ingredients = JSON.parse(req.body.ingredients);
-  const recipe = await Recipe.create({ ...req.body, preview: path, ingredients, owner: _id });
-  if (!recipe) return HttpError(404, 'not found');
+  const recipe = await Recipe.create({
+    ...req.body,
+    preview: path,
+    ingredients,
+    owner: _id,
+  });
+  if (!recipe) return HttpError(404, "not found");
   res.status(200).json(recipe);
 };
 
@@ -170,7 +176,9 @@ const deleteRecipeFromFavorite = async (req, res) => {
     { new: true }
   );
   if (!deletedFromFavorite) return HttpError(404, "recipes not found");
-  res.status(200).json({ message: "recipe has sucsessfully deleted from favorite" });
+  res
+    .status(200)
+    .json({ message: "recipe has sucsessfully deleted from favorite" });
 };
 
 const getPouplarRecipes = async (req, res) => {
@@ -227,7 +235,6 @@ const getShoppingList = async (req, res) => {
   const list = user.shoppingList;
   res.status(200).json(list);
 };
-
 
 module.exports = {
   subscribe: funcWrapper(subscribe),
