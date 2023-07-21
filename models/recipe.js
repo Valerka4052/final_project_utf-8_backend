@@ -26,22 +26,23 @@ const recipeSchema = new Schema({
     },
     category: {
         type: String,
-         enum: [
-        "Beef",
-        "Breakfast",
-        "Chicken",
-        "Dessert",
-        "Goat",
-        "Lamb",
-        "Miscellaneous",
-        "Pasta",
-        "Pork",
-        "Seafood",
-        "Side",
-        "Starter",
-        "Vegan",
-        "Vegetarian",
-      ],
+        enum: [
+            "Soup",
+            "Beef",
+            "Breakfast",
+            "Chicken",
+            "Dessert",
+            "Goat",
+            "Lamb",
+            "Miscellaneous",
+            "Pasta",
+            "Pork",
+            "Seafood",
+            "Side",
+            "Starter",
+            "Vegan",
+            "Vegetarian",
+        ],
     },
     area: {
         type: String,
@@ -56,7 +57,7 @@ const recipeSchema = new Schema({
     },
     thumb: {
         type: String,
-       },
+    },
     preview: {
         type: String,
     },
@@ -66,12 +67,12 @@ const recipeSchema = new Schema({
     },
     youtube: {
         type: String,
-       },
-    tags:  [String],
+    },
+    tags: [String],
     ingredients: {
-      _id: false,
-      type: [IngrSchema],
-      required: true,
+        _id: false,
+        type: [IngrSchema],
+        required: true,
     },
     owner: {
         type: Schema.Types.ObjectId,
@@ -79,7 +80,7 @@ const recipeSchema = new Schema({
     },
     favorite: {
         type: [{ id: { type: String, ref: 'user', } }],
-        default:[],
+        default: [],
     }
 }, {
     versionKey: false, timestamps: true,
