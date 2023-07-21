@@ -30,7 +30,7 @@ const googleCallback = async (
 
     const password = await bcrypt.hash(nanoid(), 10);
     const avatarURL = picture;
-    const verificationCode = "";
+    const verificationCode = null;
     const verify = true;
 
     const newUser = await User.create({
