@@ -223,8 +223,6 @@ const googleAuth = async (req, res) => {
     id,
   };
 
-  const { name, avatarURL } = req.user;
-
   const accessToken = jwt.sign(payload, ACCESS_SECRET_KEY, {
     expiresIn: "2m",
   });

@@ -30,16 +30,16 @@ const googleCallback = async (
 
     const password = await bcrypt.hash(nanoid(), 10);
     const avatarURL = picture;
-    // const avatarURL = gravatar.url(
-    //   email,
-    //   { s: "100", r: "x", d: "wavatar" },
-    //   false
-    // );
+    const verificationCode = "";
+    const verify = true;
+
     const newUser = await User.create({
       email,
       password,
       name: displayName,
       avatarURL,
+      verificationCode,
+      verify,
     });
     done(null, newUser);
   } catch (error) {
