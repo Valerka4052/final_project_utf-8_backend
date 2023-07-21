@@ -7,14 +7,17 @@ const { nanoid } = require("nanoid");
 const { User } = require("../models/user");
 const { funcWrapper, HttpError, sendEmail } = require("../helpers");
 require("dotenv").config();
-const { SECRET_KEY, ACCESS_SECRET_KEY, REFRESH_SECRET_KEY } = process.env;
+const { SECRET_KEY, ACCESS_SECRET_KEY, REFRESH_SECRET_KEY, BASE_URL } =
+  process.env;
 
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
 
-  if (user) {
-    throw HttpError(409, "email in use");
+  if (user && !user.verify) {
+    throw HttpError(408, "Please check your email inbox.");
+  } else if (user) {
+    throw HttpError(409, "Email in use");
   }
 
   const hashPassword = await bcrypt.hash(password, 10);
@@ -23,14 +26,16 @@ const register = async (req, res) => {
     { s: "100", r: "x", d: "wavatar" },
     false
   );
-  // const verificationCode = nanoid();
+  const verificationCode = nanoid();
 
   const newUser = await User.create({
     ...req.body,
     password: hashPassword,
     avatarURL,
+    verificationCode,
   });
   const { _id } = newUser;
+
   const payload = {
     id: _id,
   };
@@ -46,21 +51,21 @@ const register = async (req, res) => {
     refreshToken,
   });
 
-  // const verifyEmail = {
-  //   to: email,
-  //   subject: "Verified email",
-  //   html: ` <a
-  //       target="_blank"
-  //       href="http://localhost:3001/users/verify/${verificationCode}"
-  //     >
-  //       Click verify email
-  //     </a>`,
-  // };
-  // await sendEmail(verifyEmail);
+  const verifyEmail = {
+    to: email,
+    subject: "Verified email",
+    html: ` <a
+        target="_blank"
+        href="https://villiav.github.io/final_project_utf-8_front/?verificationCode=${verificationCode}"
+      >
+        Click verify email
+      </a>`,
+  };
+  await sendEmail(verifyEmail);
 
   res.status(201).json({
-    accessToken,
-    refreshToken,
+    // accessToken,
+    // refreshToken,
     user: {
       email: newUser.email,
       name: newUser.name,
@@ -98,50 +103,61 @@ const refresh = async (req, res) => {
   }
 };
 
-// const verifyEmail = async (req, res) => {
-//   const { verificationCode } = req.params;
-//   const user = await User.findOne({ verificationCode });
-//   if (!user) {
-//     throw HttpError(404, "User not found");
-//   }
-//   await User.findByIdAndUpdate(user._id, {
-//     verify: true,
-//     verificationCode: "",
-//   });
-//   res.status(200).json({ message: "Verification successful" });
-// };
+const verifyEmail = async (req, res) => {
+  const { verificationCode } = req.params;
+  const user = await User.findOne({ verificationCode });
 
-// const resendVerifyEmail = async (req, res) => {
-//   const { email } = req.body;
-//   const user = await User.findOne({ email });
-//   if (!user) {
-//     throw HttpError(404, "User not found");
-//   }
-//   if (user.verify) {
-//     throw HttpError(400, "Verification has already been passed");
-//   }
+  if (!user) {
+    throw HttpError(404, "user not found");
+  }
+  const { accessToken, refreshToken } = user;
+  await User.findByIdAndUpdate(user._id, {
+    verify: true,
+    verificationCode: "",
+  });
 
-//   const verifyEmail = {
-//     to: email,
-//     subject: "Verify Cemailode",
-//     html: `<a target='_blank' href="http://localhost:3001/users/verify/${user.verificationCode}">Click verify email</a>`,
-//   };
-//   await sendMail(verifyEmail);
-//   res.status(200).json({ message: "Verification email sent" });
-// };
+  res.status(200).json({
+    accessToken,
+    refreshToken,
+    message: "verification successful",
+  });
+};
+
+const resendVerifyEmail = async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  const { verificationCode } = user;
+  console.log(verificationCode);
+  if (!user) {
+    throw HttpError(404, "user not found");
+  }
+  if (user.verify) {
+    throw HttpError(400, "verification has already been passed");
+  }
+
+  const verifyEmail = {
+    to: email,
+    subject: " Resend verify email",
+    html: `<a target='_blank' href="https://villiav.github.io/final_project_utf-8_front/?verificationCode=${verificationCode}">Click verify email</a>`,
+  };
+  await sendEmail(verifyEmail);
+  res.status(200).json({
+    message: "Verification email sent",
+  });
+};
 
 const login = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw HttpError(403, "email or password is wrong");
+    throw HttpError(403, "Email or password is wrong");
   }
-  // if (!user.verify) {
-  //   throw HttpError(404, "User not found");
-  // }
+  if (!user.verify) {
+    throw HttpError(404, "user not found");
+  }
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw HttpError(403, "email or password is wrong");
+    throw HttpError(403, "Email or password is wrong");
   }
   const payload = {
     id: user._id,
@@ -231,6 +247,6 @@ module.exports = {
   refresh: funcWrapper(refresh),
   googleAuth: funcWrapper(googleAuth),
 
-  // verifyEmail: funcWrapper(verifyEmail),
-  // resendVerifyEmail: funcWrapper(resendVerifyEmail),
+  verifyEmail: funcWrapper(verifyEmail),
+  resendVerifyEmail: funcWrapper(resendVerifyEmail),
 };
